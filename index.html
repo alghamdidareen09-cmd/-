@@ -1,0 +1,618 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c4774">
+  <title>مختبر الطاقة النووية | اليورانيوم والثوريوم</title>
+  <style>
+    :root {
+      --navy: #103d66;
+      --blue: #168bd1;
+      --sky: #67c5ee;
+      --gold: #d4a72c;
+      --ink: #173451;
+      --muted: #63809a;
+      --line: #d8e7f1;
+      --paper: #f4f9fd;
+      --white: #fff;
+      --green: #16866c;
+      --red: #cc4d53;
+      --shadow: 0 12px 32px rgba(15, 62, 101, .09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Tahoma, Arial, sans-serif;
+      line-height: 1.7;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .topbar {
+      min-height: 76px;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px clamp(16px, 4vw, 54px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 215px; }
+    .brand-mark {
+      width: 45px; height: 45px; border-radius: 15px;
+      display: grid; place-items: center; color: white;
+      background: linear-gradient(145deg, var(--blue), var(--navy));
+      font-size: 25px; box-shadow: 0 6px 16px #168bd13b;
+    }
+    .brand strong { display: block; color: var(--navy); font-size: 15px; }
+    .brand small { display: block; color: var(--muted); font-size: 11px; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .status-pill, .button {
+      border: 1px solid var(--line); border-radius: 12px;
+      background: white; color: var(--navy); padding: 9px 14px;
+      font-weight: 700; font-size: 13px;
+    }
+    .button.primary { background: var(--navy); color: white; border-color: var(--navy); }
+    .button.gold { background: #fff6dc; border-color: #f0d891; color: #765c12; }
+    .button:hover { transform: translateY(-1px); box-shadow: 0 5px 14px #103d6618; }
+    .layout { display: grid; grid-template-columns: 248px minmax(0,1fr); min-height: calc(100vh - 76px); }
+    aside {
+      background: #fff; border-left: 1px solid var(--line);
+      padding: 20px 13px; position: sticky; top: 76px;
+      height: calc(100vh - 76px); overflow-y: auto;
+    }
+    .nav-label { color: #8aa0b3; font-size: 11px; font-weight: bold; padding: 10px 12px 5px; }
+    .nav-link {
+      display: flex; width: 100%; align-items: center; gap: 11px;
+      border: 0; background: transparent; color: #4d6982;
+      text-align: right; padding: 10px 12px; margin: 2px 0;
+      border-radius: 11px; font-size: 13px; font-weight: 700;
+    }
+    .nav-link:hover, .nav-link.active { background: #eaf5fc; color: var(--navy); }
+    .nav-link.active { box-shadow: inset -3px 0 var(--blue); }
+    .nav-icon { width: 21px; text-align: center; font-size: 17px; }
+    main { width: 100%; max-width: 1500px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 42px) 60px; }
+    .hero {
+      position: relative; overflow: hidden; border-radius: 22px;
+      color: white; padding: clamp(24px,4vw,48px);
+      background: radial-gradient(circle at 86% 16%, #69c8ee 0, transparent 27%),
+                  linear-gradient(115deg, #0c365e 0%, #155e91 60%, #2189be 100%);
+      box-shadow: var(--shadow); margin-bottom: 24px;
+    }
+    .hero:after {
+      content: "⚛"; position: absolute; left: 5%; top: -52px;
+      color: #ffffff17; font-size: 250px; line-height: 1;
+    }
+    .eyebrow { color: #c9e8fa; font-size: 12px; font-weight: bold; letter-spacing: .4px; }
+    h1 { margin: 5px 0 7px; line-height: 1.35; font-size: clamp(25px, 3vw, 38px); }
+    .hero p { margin: 0; max-width: 670px; color: #e3f3fc; font-size: 14px; }
+    .hero .button { position: relative; z-index: 1; margin-top: 20px; }
+    .page-head { margin-bottom: 22px; }
+    .page-head h1 { color: var(--navy); font-size: 28px; margin: 0 0 5px; }
+    .page-head p { color: var(--muted); margin: 0; font-size: 14px; }
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .grid.three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .grid.four { grid-template-columns: repeat(4,minmax(0,1fr)); }
+    .card {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: 17px; padding: 19px; box-shadow: 0 5px 20px #103d6608;
+    }
+    .card h2, .card h3 { color: var(--navy); margin: 0 0 10px; font-size: 17px; }
+    .card p { color: var(--muted); margin: 4px 0 12px; font-size: 13px; }
+    .stat-card { position: relative; overflow: hidden; min-height: 123px; }
+    .stat-card:after { content: ""; position: absolute; width: 75px; height: 75px; border-radius: 50%; left: -17px; bottom: -28px; background: #168bd110; }
+    .stat-value { color: var(--navy); font-size: 25px; font-weight: bold; }
+    .stat-title { color: var(--muted); font-size: 12px; }
+    .element-card { padding: 0; overflow: hidden; }
+    .element-card .element-top { padding: 16px; color: white; }
+    .element-card.uranium .element-top { background: linear-gradient(125deg,#168bd1,#0d527f); }
+    .element-card.thorium .element-top { background: linear-gradient(125deg,#e2b63e,#ab7812); }
+    .element-symbol { display: flex; align-items: center; justify-content: space-between; font-weight: bold; }
+    .element-symbol b { font-size: 36px; line-height: 1; }
+    .element-info { padding: 14px 16px; }
+    .element-info div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #edf2f6; font-size: 12px; }
+    .element-info div:last-child { border: 0; }
+    .element-info strong { color: var(--navy); }
+    .callout { background: #edf7fd; border: 1px solid #cee8f6; border-radius: 12px; padding: 13px 15px; color: #315e7d; font-size: 13px; }
+    .callout.warn { background: #fff8e7; border-color: #f0dda6; color: #755a1a; }
+    .callout.safe { background: #eaf8f4; border-color: #c8e9df; color: #286d5c; }
+    .field { margin: 12px 0; }
+    .field label { display: block; font-weight: bold; font-size: 12px; color: #43627c; margin-bottom: 5px; }
+    input[type="number"], input[type="text"], textarea, select {
+      width: 100%; border: 1px solid #ccdeeb; border-radius: 10px;
+      background: white; padding: 10px 12px; color: var(--ink); outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #168bd11b; }
+    input[type="range"] { width: 100%; accent-color: var(--blue); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result { border-radius: 13px; padding: 14px; margin-top: 12px; background: #edf7fd; color: var(--navy); font-weight: bold; }
+    .result strong { font-size: 23px; }
+    .chart-wrap { min-height: 230px; }
+    canvas { width: 100%; height: 250px; display: block; }
+    .legend { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 12px; margin-top: 8px; }
+    .dot { width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-left: 5px; }
+    .tab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .tab {
+      border: 1px solid var(--line); background: white; color: #48647c;
+      border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: bold;
+    }
+    .tab.active { background: var(--navy); border-color: var(--navy); color: white; }
+    .rad-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+    .rad-choice { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: white; text-align: center; color: var(--navy); }
+    .rad-choice.active { border-color: var(--blue); background: #eff9fe; box-shadow: 0 0 0 2px #168bd11b; }
+    .rad-choice strong { display: block; font-size: 19px; }
+    .rad-choice small { color: var(--muted); font-size: 11px; }
+    .help {
+      display: inline-grid; place-items: center; width: 22px; height: 22px;
+      border-radius: 50%; border: 1px solid #9bb8cc; color: var(--blue);
+      background: white; font-weight: bold; font-size: 12px; vertical-align: middle;
+    }
+    .help:hover { background: #eaf6fd; }
+    .hidden { display: none !important; }
+    .timeline { padding: 14px 4px; }
+    .timeline-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+    .year-badge { color: var(--blue); font-size: 24px; font-weight: bold; }
+    .map-layout { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(260px,1fr); gap: 16px; }
+    .map-box { background: linear-gradient(180deg,#eaf6fd,#f8fbfe); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .map-box svg { width: 100%; display: block; }
+    .continent { fill: #b8d3e3; stroke: #f8fcff; stroke-width: 2; }
+    .map-point { fill: var(--gold); stroke: white; stroke-width: 3; cursor: pointer; transition: r .15s; }
+    .map-point:hover { r: 10; }
+    .country-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .country-buttons button { background: white; color: var(--navy); border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; font-size: 12px; }
+    .country-buttons button.active { background: var(--navy); color: white; }
+    .assistant-msg { background: #f1f7fb; border-radius: 12px 12px 3px 12px; padding: 12px; color: #385973; font-size: 13px; margin: 10px 0; }
+    .assistant-msg.user { background: #e7f4fc; color: var(--navy); margin-right: 15%; }
+    .quiz-option { display: block; border: 1px solid var(--line); background: white; border-radius: 10px; padding: 10px; margin: 8px 0; cursor: pointer; font-size: 13px; }
+    .quiz-option:has(input:checked) { border-color: var(--blue); background: #f0f9fe; }
+    .quiz-option input { accent-color: var(--blue); margin-left: 7px; }
+    .certificate {
+      text-align: center; border: 8px double #d5ad47; border-radius: 15px;
+      padding: 32px 18px; background: linear-gradient(135deg,#fffdf5,#f0f8fc);
+    }
+    .certificate h2 { font-size: 27px; color: var(--navy); }
+    .certificate .cert-name { font-size: 23px; font-weight: bold; color: #a27b1e; }
+    .small { font-size: 11px !important; }
+    .footer-note { text-align: center; font-size: 11px; color: #8299ab; padding-top: 30px; }
+    .toast { position: fixed; bottom: 22px; left: 22px; z-index: 30; background: var(--navy); color: white; padding: 11px 16px; border-radius: 11px; box-shadow: var(--shadow); font-size: 13px; }
+    @media(max-width: 950px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: sticky; top: 76px; height: auto; padding: 8px; z-index: 8; border: 0; border-bottom: 1px solid var(--line); }
+      .nav-label { display: none; }
+      .nav-list { display: flex; overflow-x: auto; gap: 4px; }
+      .nav-link { white-space: nowrap; width: auto; padding: 8px 11px; }
+      .nav-link.active { box-shadow: inset 0 -3px var(--blue); }
+      .grid.four { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width: 640px) {
+      .brand { min-width: auto; } .brand small, .status-pill { display: none; }
+      .brand strong { font-size: 12px; } .brand-mark { width: 38px; height: 38px; }
+      .topbar { padding: 10px 13px; } main { padding: 18px 13px 38px; }
+      .grid.two, .grid.three, .grid.four, .map-layout { grid-template-columns: 1fr; }
+      .rad-grid { grid-template-columns: repeat(2,1fr); }
+      .field-row { grid-template-columns: 1fr; gap: 0; }
+      .hero { border-radius: 16px; } .hero:after { font-size: 170px; top: 0; }
+      .page-head h1 { font-size: 23px; }
+    }
+    @media print {
+      body { background: white; } .topbar, aside, .no-print, .footer-note { display: none !important; }
+      .layout { display: block; } main { max-width: none; padding: 0; }
+      .card { box-shadow: none; break-inside: avoid; }
+      body.print-report #app > section:not(#page-report) { display: none !important; }
+      body.print-cert #app > section:not(#page-certificate) { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">⚛</div>
+      <div><strong>مختبر الطاقة النووية</strong><small>رحلة تعليمية في العناصر النووية</small></div>
+    </div>
+    <div class="top-actions">
+      <span class="status-pill">محاكاة تعليمية آمنة</span>
+      <button class="button gold" onclick="showPage('page-report')">إنشاء التقرير</button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside>
+      <div class="nav-label">المختبر التفاعلي</div>
+      <nav class="nav-list" aria-label="التنقل بين صفحات المختبر">
+        <button class="nav-link active" data-page="page-home"><span class="nav-icon">⌂</span>الرئيسية</button>
+        <button class="nav-link" data-page="page-simulation"><span class="nav-icon">◉</span>المحاكاة والحسابات</button>
+        <button class="nav-link" data-page="page-radiation"><span class="nav-icon">☢</span>النظائر والإشعاع</button>
+        <button class="nav-link" data-page="page-fuel"><span class="nav-icon">⟳</span>دورة الوقود</button>
+        <button class="nav-link" data-page="page-energy"><span class="nav-icon">ϟ</span>الطاقة والنفايات</button>
+        <button class="nav-link" data-page="page-map"><span class="nav-icon">◎</span>خريطة الموارد</button>
+        <button class="nav-link" data-page="page-timeline"><span class="nav-icon">◷</span>الآلة الزمنية</button>
+        <button class="nav-link" data-page="page-assistant"><span class="nav-icon">✦</span>المساعد الذكي</button>
+        <button class="nav-link" data-page="page-report"><span class="nav-icon">▤</span>دفتر المختبر</button>
+        <button class="nav-link" data-page="page-quiz"><span class="nav-icon">✓</span>الاختبار والشهادة</button>
+      </nav>
+    </aside>
+    <main id="app">
+      <section id="page-home">
+        <div class="hero">
+          <span class="eyebrow">أولمبياد الكيمياء التقني • مختبر تفاعلي</span>
+          <h1>من الذرة إلى مستقبل الطاقة</h1>
+          <p>استكشف نظائر اليورانيوم والثوريوم، جرّب الحسابات التعليمية، وقارن بين دورة الوقود والطاقة والنفايات — خطوة بخطوة.</p>
+          <button class="button gold" onclick="showPage('page-simulation')">ابدأ التجربة ←</button>
+        </div>
+        <div class="grid four">
+          <div class="card stat-card"><div class="stat-value">10</div><div class="stat-title">صفحات وتجارب تعليمية</div></div>
+          <div class="card stat-card"><div class="stat-value">2</div><div class="stat-title">عنصران للمقارنة: U وTh</div></div>
+          <div class="card stat-card"><div class="stat-value">4</div><div class="stat-title">أنواع إشعاع للتعلّم</div></div>
+          <div class="card stat-card"><div class="stat-value">∞</div><div class="stat-title">مساحة للأسئلة والاستكشاف</div></div>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <article class="card element-card uranium">
+            <div class="element-top"><div class="element-symbol"><span><b>U</b><br>اليورانيوم</span><span>92</span></div></div>
+            <div class="element-info"><div><span>نظير للمحاكاة</span><strong>يورانيوم-235</strong></div><div><span>نصف العمر التقريبي</span><strong>7.04 × 10⁸ سنة</strong></div></div>
+          </article>
+          <article class="card element-card thorium">
+            <div class="element-top"><div class="element-symbol"><span><b>Th</b><br>الثوريوم</span><span>90</span></div></div>
+            <div class="element-info"><div><span>نظير للمحاكاة</span><strong>ثوريوم-232</strong></div><div><span>نصف العمر التقريبي</span><strong>1.405 × 10¹⁰ سنة</strong></div></div>
+          </article>
+        </div>
+        <div class="callout warn" style="margin-top:16px">الموقع تعليمي فقط؛ الحسابات تقريبية ولا تصلح لاتخاذ قرارات تشغيلية أو صحية أو هندسية. لا توجد محاكاة لتصميم انفجار أو تفاعلات مؤذية.</div>
+      </section>
+
+      <section id="page-simulation" class="hidden">
+        <div class="page-head"><h1>محاكاة نصف العمر والحسابات</h1><p>غيّر النظير والكتلة والزمن لملاحظة التناقص الإشعاعي نظرياً.</p></div>
+        <div class="grid two">
+          <div class="card">
+            <h2>إعدادات التجربة</h2>
+            <div class="field"><label for="isotope">اختر النظير</label><select id="isotope"><option value="u235">يورانيوم-235 (U-235)</option><option value="u238">يورانيوم-238 (U-238)</option><option value="th232">ثوريوم-232 (Th-232)</option></select></div>
+            <div class="field"><label for="mass">الكتلة الابتدائية (غرام)</label><input id="mass" type="number" min="0.001" step="0.1" value="100"></div>
+            <div class="field"><label for="years">الزمن المنقضي (سنة)</label><input id="years" type="number" min="0" step="1" value="1000000000"></div>
+            <div class="field"><label>نوع الإشعاع المراد دراسته <button class="help" data-help="ألفا: جسيمات نواتها هيليوم. بيتا: إلكترون أو بوزيترون. غاما: فوتونات عالية الطاقة. النيوترون: جسيم متعادل. لكل نوع خصائص مختلفة؛ الاختيار هنا للتعلّم فقط ولا يغيّر قانون نصف العمر." aria-label="شرح أنواع الإشعاع">؟</button></label><select id="sim-radiation"><option>ألفا (α)</option><option>بيتا (β)</option><option>غاما (γ)</option><option>نيوترونات (n)</option></select></div>
+            <button class="button primary" id="calculate">احسب النتيجة</button>
+            <div class="result" id="calc-result" aria-live="polite"></div>
+          </div>
+          <div class="card">
+            <h2>منحنى التناقص الإشعاعي</h2>
+            <p>النسبة المتبقية عبر ثلاثة أنصاف أعمار للنظير المختار.</p>
+            <div class="chart-wrap"><canvas id="decay-chart" aria-label="رسم بياني للتناقص الإشعاعي"></canvas></div>
+            <div class="legend"><span><i class="dot" style="background:#168bd1"></i>الكتلة النسبية المتبقية</span></div>
+          </div>
+        </div>
+        <div class="grid three" style="margin-top:16px">
+          <div class="card"><h3>الأدوات الافتراضية</h3><p>حاسبة نصف العمر، مقياس الزمن، اختيار النظائر، ورسم بياني تفاعلي. لا يتطلب المختبر عينات حقيقية.</p></div>
+          <div class="card"><h3>كيف نحسب؟</h3><p>الكتلة المتبقية = الكتلة الابتدائية × (½)<sup>(الزمن ÷ نصف العمر)</sup>.</p></div>
+          <div class="card"><h3>سجّل ملاحظتك</h3><p>احفظ إعدادات هذه التجربة في دفتر المختبر لتضمينها في التقرير.</p><button class="button" id="save-simulation">حفظ بيانات التجربة</button></div>
+        </div>
+      </section>
+
+      <section id="page-radiation" class="hidden">
+        <div class="page-head"><h1>النظائر والإشعاع</h1><p>تعرّف على النظائر واستخدامات العناصر والاختلاف المفاهيمي بين أنواع الإشعاع.</p></div>
+        <div class="card">
+          <h2>اختر العنصر والنظير</h2>
+          <div class="tab-row"><button class="tab active" data-element="uranium">اليورانيوم</button><button class="tab" data-element="thorium">الثوريوم</button></div>
+          <div class="grid two" id="isotope-info"></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <h2>ما الذي يميّز أنواع الإشعاع؟ <button class="help" data-help="ألفا (α) نواة هيليوم موجبة؛ بيتا (β) إلكترون أو بوزيترون؛ غاما (γ) فوتون كهرومغناطيسي؛ النيوترون جسيم متعادل. تختلف قدرتها على التأيين والاختراق، وتخضع للتنظيم والوقاية المتخصصة." aria-label="شرح أنواع الإشعاع">؟</button></h2>
+          <div class="rad-grid" id="radiation-choices">
+            <button class="rad-choice active" data-rad="alpha"><strong>α</strong><small>ألفا</small></button><button class="rad-choice" data-rad="beta"><strong>β</strong><small>بيتا</small></button><button class="rad-choice" data-rad="gamma"><strong>γ</strong><small>غاما</small></button><button class="rad-choice" data-rad="neutron"><strong>n</strong><small>نيوترونات</small></button>
+          </div>
+          <div class="field"><label>إعداد العرض</label><select id="radiation-combo"><option value="single">النوع المحدد فقط</option><option value="combined">مقارنة تعليمية بين الأنواع مجتمعة</option></select></div>
+          <div id="radiation-description" class="callout"></div>
+          <p class="small">المقارنة وصفية فقط، ولا تمثل تعريضاً فعلياً أو جرعات أو تغييراً نووياً قابلاً للتطبيق.</p>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <div class="card"><h2>استخدامات اليورانيوم</h2><p>يُستخدم اليورانيوم في بعض أنواع الوقود النووي، كما يُستخدم اليورانيوم المستنفد في تطبيقات صناعية محددة. جميع الاستخدامات تخضع لضوابط أمان وتنظيم صارمة.</p></div>
+          <div class="card"><h2>استخدامات الثوريوم</h2><p>يُدرس الثوريوم كخيار محتمل ضمن دورات وقود نووي متقدمة، وله تطبيقات تاريخية وصناعية محدودة. لا يعني ذلك أن كل دورة وقود منه جاهزة تجارياً.</p></div>
+        </div>
+      </section>
+
+      <section id="page-fuel" class="hidden">
+        <div class="page-head"><h1>مقارنة دورة الوقود النووي</h1><p>مقارنة مبسطة للمراحل العامة، وليست إرشادات تشغيلية أو تصميمية.</p></div>
+        <div class="tab-row"><button class="tab active" data-fuel="u">مسار اليورانيوم</button><button class="tab" data-fuel="th">مسار الثوريوم</button></div>
+        <div class="grid two">
+          <article class="card"><h2 id="fuel-title">مسار اليورانيوم (نظرة عامة)</h2><div id="fuel-content"></div></article>
+          <article class="card"><h2>مقارنة المراحل</h2><div class="callout">تختلف التفاصيل بين المفاعلات والسياسات الوطنية. هذه البطاقات تعرض فكرة عامة فقط.</div><div id="fuel-steps" style="margin-top:14px"></div></article>
+        </div>
+        <div class="card" style="margin-top:16px"><h2>سؤال للتفكير</h2><p id="fuel-question"></p><button class="button" onclick="showPage('page-assistant')">ناقش السؤال مع المساعد</button></div>
+      </section>
+
+      <section id="page-energy" class="hidden">
+        <div class="page-head"><h1>كفاءة الطاقة والنفايات</h1><p>استكشف أثر الافتراضات التعليمية في مقارنة الطاقة والنفايات على نحو نوعي.</p></div>
+        <div class="grid two">
+          <div class="card">
+            <h2>غيّر افتراضات المقارنة</h2>
+            <div class="field"><label for="eff-u">كفاءة تحويل افتراضية — اليورانيوم: <span id="eff-u-label">33%</span></label><input id="eff-u" type="range" min="10" max="50" value="33"></div>
+            <div class="field"><label for="eff-th">كفاءة تحويل افتراضية — الثوريوم: <span id="eff-th-label">33%</span></label><input id="eff-th" type="range" min="10" max="50" value="33"></div>
+            <div class="field"><label for="waste-factor">معامل النفايات النسبي (افتراضي): <span id="waste-label">50%</span></label><input id="waste-factor" type="range" min="10" max="100" value="50"></div>
+            <div id="energy-result" class="callout"></div>
+          </div>
+          <div class="card"><h2>رسم المقارنة</h2><canvas id="energy-chart" aria-label="مقارنة افتراضية لكفاءة الطاقة والنفايات"></canvas><div class="legend"><span><i class="dot" style="background:#168bd1"></i>تحويل الطاقة</span><span><i class="dot" style="background:#d4a72c"></i>مؤشر النفايات النسبي</span></div></div>
+        </div>
+        <div class="callout warn" style="margin-top:16px">القيم الافتراضية في هذه الصفحة تعليمية وليست قياسات صناعية أو أرقاماً معتمدة لمقارنة المفاعلات. غيّروا القيم لاستكشاف أثر الافتراضات فقط.</div>
+        <div class="card" style="margin-top:16px"><h2>السلامة أولاً</h2><p>لا تتضمن هذه المنصة ولا تقدم محاكاة لتفجير أو تغيير مواد متفاعلة لإحداث انفجار. بدلاً من ذلك، تركز المقارنة على التحويل المنضبط للطاقة وإدارة النفايات والسلامة النووية.</p></div>
+      </section>
+
+      <section id="page-map" class="hidden">
+        <div class="page-head"><h1>خريطة موارد اليورانيوم والثوريوم</h1><p>اختر علامة أو دولة لعرض بطاقة بيانات الموارد والاحتياطي.</p></div>
+        <div class="callout warn" style="margin-bottom:16px">تنبيه بيانات: الأرقام في هذا النموذج غير مضافة بعد. يجب تعبئة الكميات من مصدر موثوق وتوثيق سنة القياس وتعريف «الموارد» و«الاحتياطي» قبل النشر.</div>
+        <div class="map-layout">
+          <div class="map-box">
+            <svg viewBox="0 0 800 410" role="img" aria-label="خريطة تفاعلية تقريبية لمواقع دول مختارة">
+              <path class="continent" d="M72 91 114 66 161 73 187 99 171 124 149 136 136 166 108 177 86 153 61 134Z"/>
+              <path class="continent" d="M166 190 202 204 220 236 212 276 195 326 177 348 161 315 154 274 141 242Z"/>
+              <path class="continent" d="M342 90 381 70 421 78 440 96 426 116 391 120 377 143 347 135 329 113Z"/>
+              <path class="continent" d="M374 151 421 143 456 168 464 211 444 266 416 300 390 272 372 229 354 190Z"/>
+              <path class="continent" d="M426 92 472 70 532 73 574 90 624 88 675 111 708 144 679 163 635 154 606 176 566 166 538 186 500 167 470 181 450 151 430 132Z"/>
+              <path class="continent" d="M631 253 665 244 696 263 690 290 659 302 634 284Z"/>
+              <g class="map-hotspots">
+                <circle class="map-point" cx="138" cy="119" r="7" data-country="كندا"/><circle class="map-point" cx="190" cy="257" r="7" data-country="البرازيل"/>
+                <circle class="map-point" cx="405" cy="205" r="7" data-country="ناميبيا"/><circle class="map-point" cx="418" cy="190" r="7" data-country="النيجر"/>
+                <circle class="map-point" cx="508" cy="123" r="7" data-country="كازاخستان"/><circle class="map-point" cx="562" cy="122" r="7" data-country="الصين"/>
+                <circle class="map-point" cx="657" cy="277" r="7" data-country="أستراليا"/>
+              </g>
+              <text x="400" y="385" text-anchor="middle" fill="#68849b" font-size="12">مواقع توضيحية — انقر على إحدى العلامات</text>
+            </svg>
+          </div>
+          <div class="card">
+            <h2 id="country-title">بيانات الدولة</h2>
+            <div id="country-details" class="callout">اختر دولة من الخريطة أو القائمة لعرض بطاقة الموارد.</div>
+            <div class="country-buttons" id="country-buttons" style="margin-top:14px"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-timeline" class="hidden">
+        <div class="page-head"><h1>الآلة الزمنية النووية</h1><p>تنقّل من بدايات اكتشاف النشاط الإشعاعي إلى الحاضر وسيناريوهات مستقبلية تعليمية.</p></div>
+        <div class="card timeline">
+          <div class="year-badge" id="timeline-year">2026</div>
+          <input id="timeline-slider" type="range" min="1896" max="2050" value="2026" aria-label="شريط زمني تفاعلي">
+          <div class="timeline-labels"><span>الماضي • 1896</span><span>الحاضر • 2026</span><span>المستقبل • 2050</span></div>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <div class="card"><h2 id="timeline-title"></h2><p id="timeline-text"></p></div>
+          <div class="card"><h2>مصطلح من الرحلة</h2><div id="timeline-term" class="callout"></div></div>
+        </div>
+        <p class="small">الأحداث التاريخية موجز تعليمي، أما السنوات المستقبلية فهي سيناريوهات للنقاش وليست تنبؤات.</p>
+      </section>
+
+      <section id="page-assistant" class="hidden">
+        <div class="page-head"><h1>المساعد التعليمي</h1><p>اطرح سؤالاً عن التجربة. المساعد يوجّهك بأسئلة وتلميحات بدلاً من تقديم حل جاهز.</p></div>
+        <div class="grid two">
+          <div class="card">
+            <h2>اسأل وتعلّم</h2>
+            <div id="chat-log" aria-live="polite"><div class="assistant-msg">أهلاً! ما الذي ترغب في فهمه؟ جرّب أن تسأل: «كيف يؤثر نصف العمر؟» أو «ما الفرق بين ألفا وغاما؟»</div></div>
+            <label class="field"><span class="hidden">اكتب سؤالك</span><textarea id="chat-input" rows="3" placeholder="اكتب سؤالك هنا..."></textarea></label>
+            <button class="button primary" id="send-question">إرسال السؤال</button>
+            <div class="tab-row"><button class="tab prompt" data-prompt="كيف يؤثر نصف العمر على الكتلة المتبقية؟">نصف العمر</button><button class="tab prompt" data-prompt="ما الفرق بين إشعاع ألفا وغاما؟">أنواع الإشعاع</button><button class="tab prompt" data-prompt="كيف أقارن بين الوقودين؟">دورة الوقود</button></div>
+          </div>
+          <div class="card"><h2>طريقة التعلّم</h2><p>1. اكتب فكرتك أو ملاحظتك.</p><p>2. ستحصل على توجيه أو سؤال يساعدك على التفكير.</p><p>3. ارجع إلى صفحة المحاكاة واختبر فرضيتك.</p><div class="callout">هذه نسخة أولية بمساعد تعليمي ذي ردود إرشادية جاهزة، وليست خدمة ذكاء اصطناعي متصلة أو بديلاً عن معلّمك.</div><p class="small">لا ترسل بيانات شخصية أو معلومات حساسة.</p></div>
+        </div>
+      </section>
+
+      <section id="page-report" class="hidden">
+        <div class="page-head"><h1>دفتر المختبر والتقرير الإلكتروني</h1><p>سجّل بياناتك وملاحظاتك، ثم اطبع تقريرك أو احفظه PDF من نافذة الطباعة.</p></div>
+        <div class="grid two no-print">
+          <div class="card">
+            <h2>بيانات الباحث والتجربة</h2>
+            <div class="field"><label for="student-name">اسم الباحث/ة</label><input type="text" id="student-name" placeholder="اكتب الاسم"></div>
+            <div class="field"><label for="experiment-title">عنوان التجربة</label><input type="text" id="experiment-title" value="مقارنة نصف العمر للنظائر"></div>
+            <div class="field"><label for="hypothesis">الفرضية</label><textarea id="hypothesis" rows="2" placeholder="ماذا تتوقع؟ ولماذا؟"></textarea></div>
+            <div class="field"><label for="observations">الملاحظات والنتائج</label><textarea id="observations" rows="4" placeholder="دوّن ما لاحظته..."></textarea></div>
+            <button class="button primary" id="save-notes">حفظ البيانات</button>
+            <button class="button" id="print-report">طباعة / حفظ PDF</button>
+          </div>
+          <div class="card"><h2>سجل المحاكاة المحفوظ</h2><div id="saved-records"></div><button class="button" id="clear-records">مسح السجل</button></div>
+        </div>
+        <div class="card" id="report-print">
+          <h2>التقرير المختبري</h2><p><strong>اسم الباحث/ة:</strong> <span data-report="name">—</span></p>
+          <p><strong>عنوان التجربة:</strong> <span data-report="title">—</span></p>
+          <p><strong>التاريخ:</strong> <span id="report-date"></span></p>
+          <h3>الفرضية</h3><p data-report="hypothesis">—</p>
+          <h3>إعدادات ونتيجة آخر محاكاة</h3><p id="report-simulation">لم تُحفظ محاكاة بعد.</p>
+          <h3>الملاحظات</h3><p data-report="observations">—</p>
+          <p class="small">تقرير تعليمي أولي؛ راجع القيم ومصادرها قبل استخدامها في أي عرض علمي.</p>
+        </div>
+      </section>
+
+      <section id="page-quiz" class="hidden">
+        <div class="page-head"><h1>اختبار قصير وشهادة إتمام</h1><p>أجب عن الأسئلة لمراجعة المفاهيم. تُفتح الشهادة عند الحصول على 4 إجابات صحيحة على الأقل.</p></div>
+        <div class="grid two">
+          <div class="card"><h2>الاختبار</h2><form id="quiz-form"></form><button class="button primary" id="submit-quiz">تحقق من الإجابات</button><div id="quiz-result" class="result hidden" aria-live="polite"></div></div>
+          <div class="card"><h2>شهادة الإتمام</h2><div class="field"><label for="certificate-name">الاسم على الشهادة</label><input id="certificate-name" type="text" placeholder="اكتب الاسم الكامل"></div><div id="certificate-preview" class="certificate"><div>⚛ • مختبر الطاقة النووية • ⚛</div><h2>شهادة إتمام تجربة تعليمية</h2><p>تشهد المنصة بأن</p><div class="cert-name" id="cert-preview-name">اسم الباحث/ة</div><p>أتم/ت تجربة تعليمية حول اليورانيوم والثوريوم</p><div id="cert-status" class="callout warn">أكمل الاختبار لفتح الشهادة.</div></div><button class="button gold no-print" id="print-certificate" disabled style="margin-top:12px">طباعة الشهادة</button></div>
+        </div>
+      </section>
+      <div class="footer-note">مختبر تعليمي تجريبي • استعن بالمعلّم/ة والمراجع العلمية الموثوقة • 2026</div>
+    </main>
+  </div>
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script>
+    const isotopeData = {
+      u235: { name: "يورانيوم-235", half: 7.04e8, halfLabel: "7.04 × 10⁸ سنة", element: "اليورانيوم", number: 92 },
+      u238: { name: "يورانيوم-238", half: 4.468e9, halfLabel: "4.468 × 10⁹ سنة", element: "اليورانيوم", number: 92 },
+      th232: { name: "ثوريوم-232", half: 1.405e10, halfLabel: "1.405 × 10¹⁰ سنة", element: "الثوريوم", number: 90 }
+    };
+    const radiationText = {
+      alpha: "ألفا (α): جسيم ثقيل موجب الشحنة نسبياً، وقدرته على الاختراق أقل من غاما. يختلف أثره باختلاف المادة والظروف؛ هنا نعرض وصفاً علمياً عاماً فقط.",
+      beta: "بيتا (β): إلكترون أو بوزيترون ينبعث في بعض التحولات النووية. خصائصه بين ألفا وغاما بصورة عامة، ولا يمثّل هذا العرض قياساً لجرعة.",
+      gamma: "غاما (γ): فوتون كهرومغناطيسي عالي الطاقة، غير مشحون وعادةً أكثر اختراقاً من ألفا وبيتا. الحماية والتعامل الفعلي من اختصاص المختصين.",
+      neutron: "النيوترونات جسيمات متعادلة قد تتفاعل مع النوى بطرق مختلفة. يقتصر هذا النموذج على التعريف ولا يحاكي تنشيط المواد أو شروطاً تشغيلية."
+    };
+    const countryData = {
+      "كندا": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
+      "البرازيل": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
+      "ناميبيا": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
+      "النيجر": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
+      "كازاخستان": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
+      "الصين": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
+      "أستراليا": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"}
+    };
+    const recordsKey = "nuclearLabRecordsV1";
+    const notesKey = "nuclearLabNotesV1";
+    const quizKey = "nuclearLabQuizPassedV1";
+    let selectedElement = "uranium", selectedRadiation = "alpha", selectedCountry = "", quizPassed = localStorage.getItem(quizKey) === "true";
+    const $ = (selector, root=document) => root.querySelector(selector);
+    const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
+    function toast(message) {
+      const box = $("#toast"); box.textContent = message; box.classList.remove("hidden");
+      clearTimeout(toast.timer); toast.timer = setTimeout(() => box.classList.add("hidden"), 2600);
+    }
+    function showPage(id) {
+      $$("#app > section").forEach(section => section.classList.toggle("hidden", section.id !== id));
+      $$(".nav-link").forEach(link => link.classList.toggle("active", link.dataset.page === id));
+      if (id === "page-report") { renderReport(); renderRecords(); }
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+    $$(".nav-link").forEach(link => link.addEventListener("click", () => showPage(link.dataset.page)));
+    function formatNum(value) { return new Intl.NumberFormat("ar", {maximumSignificantDigits:5}).format(value); }
+    function drawDecay() {
+      const canvas = $("#decay-chart"), rect = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+      if (!rect.width) return;
+      canvas.width = rect.width*dpr; canvas.height = 250*dpr;
+      const ctx = canvas.getContext("2d"); ctx.scale(dpr,dpr);
+      const w=rect.width,h=250,p={l:42,r:12,t:15,b:35}, cw=w-p.l-p.r,ch=h-p.t-p.b;
+      ctx.clearRect(0,0,w,h); ctx.font="11px Tahoma"; ctx.strokeStyle="#dce8f0"; ctx.fillStyle="#69849a"; ctx.lineWidth=1;
+      for(let i=0;i<=4;i++){ const y=p.t+ch*i/4; ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();ctx.fillText(`${100-i*25}%`,2,y+4); }
+      const selected=isotopeData[$("#isotope").value]; ctx.strokeStyle="#168bd1";ctx.lineWidth=3;ctx.beginPath();
+      for(let i=0;i<=100;i++){const x=i/100*3, y=Math.pow(.5,x)*100; const px=p.l+x/3*cw, py=p.t+(1-y/100)*ch; if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}
+      ctx.stroke();ctx.fillStyle="#69849a";ctx.textAlign="center";
+      [0,1,2,3].forEach(x=>ctx.fillText(`${x}×`,p.l+x/3*cw,h-10));
+      ctx.fillText(`الزمن بوحدة نصف عمر ${selected.name}`,w/2,h-1);ctx.textAlign="start";
+    }
+    function calculate() {
+      const isotope=isotopeData[$("#isotope").value], mass=Number($("#mass").value), years=Number($("#years").value);
+      if (!Number.isFinite(mass) || mass <= 0 || !Number.isFinite(years) || years < 0) { toast("أدخل كتلة موجبة وزمناً غير سالب."); return; }
+      const fraction=Math.pow(0.5,years/isotope.half), remaining=mass*fraction;
+      $("#calc-result").innerHTML=`النظير: ${isotope.name}<br>نصف العمر: ${isotope.halfLabel}<br>الكتلة المتبقية تقريباً: <strong>${formatNum(remaining)} غ</strong> (${formatNum(fraction*100)}%)`;
+      drawDecay();
+    }
+    $("#calculate").addEventListener("click",calculate);
+    $("#isotope").addEventListener("change",calculate);
+    $("#mass").addEventListener("input",calculate); $("#years").addEventListener("input",calculate);
+    window.addEventListener("resize",()=>{drawDecay();drawEnergy();});
+    function getRecords(){try{return JSON.parse(localStorage.getItem(recordsKey)||"[]");}catch(error){console.error("تعذر قراءة سجل المختبر",error);return [];}}
+    function saveSimulation(){
+      const iso=isotopeData[$("#isotope").value], record={date:new Date().toLocaleString("ar"),isotope:iso.name,mass:Number($("#mass").value),years:Number($("#years").value),radiation:$("#sim-radiation").value,result:$("#calc-result").innerText};
+      const records=getRecords();records.unshift(record);
+      try{localStorage.setItem(recordsKey,JSON.stringify(records));localStorage.setItem("nuclearLabLastSimulation",JSON.stringify(record));toast("تم حفظ بيانات المحاكاة في هذا المتصفح.");renderRecords();renderReport();}
+      catch(error){console.error("تعذر حفظ بيانات المختبر",error);toast("تعذر الحفظ؛ تحقق من مساحة التخزين في المتصفح.");}
+    }
+    $("#save-simulation").addEventListener("click",saveSimulation);
+    function renderRecords(){
+      const records=getRecords();$("#saved-records").innerHTML=records.length?records.slice(0,8).map(r=>`<div class="callout" style="margin:8px 0"><strong>${escapeHtml(r.isotope)}</strong> • ${escapeHtml(r.date)}<br>${escapeHtml(String(r.result).replace(/\n/g," • "))}</div>`).join(""):"<p>لا توجد بيانات محفوظة حتى الآن. احفظ نتيجة من صفحة المحاكاة.</p>";
+    }
+    function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+    $("#clear-records").addEventListener("click",()=>{if(confirm("هل تريد مسح سجل المحاكاة المحفوظ؟")){localStorage.removeItem(recordsKey);localStorage.removeItem("nuclearLabLastSimulation");renderRecords();renderReport();toast("تم مسح السجل.");}});
+    $$(".tab[data-element]").forEach(button=>button.addEventListener("click",()=>{selectedElement=button.dataset.element;$$(".tab[data-element]").forEach(x=>x.classList.toggle("active",x===button));renderIsotopes();}));
+    function renderIsotopes(){
+      const items=selectedElement==="uranium"?[isotopeData.u235,isotopeData.u238]:[isotopeData.th232];
+      $("#isotope-info").innerHTML=items.map(i=>`<article class="card element-card ${selectedElement}"><div class="element-top"><div class="element-symbol"><span><b>${selectedElement==="uranium"?"U":"Th"}</b><br>${i.element}</span><span>${i.number}</span></div></div><div class="element-info"><div><span>النظير</span><strong>${i.name}</strong></div><div><span>نصف العمر التقريبي</span><strong>${i.halfLabel}</strong></div><div><span>حالة العرض</span><strong>معلومة تعليمية</strong></div></div></article>`).join("");
+      updateRadiation();
+    }
+    $$(".rad-choice").forEach(button=>button.addEventListener("click",()=>{selectedRadiation=button.dataset.rad;$$(".rad-choice").forEach(x=>x.classList.toggle("active",x===button));updateRadiation();}));
+    $("#radiation-combo").addEventListener("change",updateRadiation);
+    function updateRadiation(){
+      const names={alpha:"ألفا",beta:"بيتا",gamma:"غاما",neutron:"النيوترونات"};
+      const intro=$("#radiation-combo").value==="combined"?"مقارنة مجتمعة للأنواع الأربعة: ":"";
+      $("#radiation-description").textContent=intro+(($("#radiation-combo").value==="combined")?Object.values(radiationText).join(" "):radiationText[selectedRadiation])+` العنصر المحدد: ${selectedElement==="uranium"?"اليورانيوم":"الثوريوم"}.`;
+    }
+    const fuelInfo={
+      u:{title:"مسار اليورانيوم (نظرة عامة)",content:"يبدأ المسار من موارد اليورانيوم، ثم تمر المواد بمراحل إعداد وقود نووي وفق ضوابط تنظيمية، تليها مرحلة الاستخدام في مفاعل مناسب ثم إدارة الوقود المستهلك والنفايات.",steps:["الموارد والتعدين — لمحة عامة","إعداد الوقود — يخضع للرقابة","استخدام الطاقة — داخل منشآت مرخصة","إدارة الوقود المستهلك والنفايات"],question:"ما العوامل العلمية والاقتصادية والبيئية التي ينبغي مراعاتها عند تقييم دورة الوقود؟"},
+      th:{title:"مسار الثوريوم (نظرة عامة)",content:"الثوريوم-232 مادة خصبة يمكن ضمن أنظمة نووية معينة أن تتحول إلى مادة انشطارية. يتطلب المسار تقنيات ومراحل معالجة متخصصة، وما زالت جوانب منه موضع بحث وتطوير.",steps:["وجود الثوريوم في الموارد الطبيعية","تحويل نووي ضمن نظام مناسب — مفهوم نظري عام","إنتاج الطاقة في منظومة مصممة ومرخصة","إدارة المواد الناتجة والنفايات"],question:"لماذا يوصف الثوريوم بأنه مادة خصبة، وما التحديات التي تواجه تحويل الفكرة إلى منظومة تجارية؟"}
+    };
+    function renderFuel(which){
+      const f=fuelInfo[which];$("#fuel-title").textContent=f.title;$("#fuel-content").textContent=f.content;
+      $("#fuel-steps").innerHTML=f.steps.map((s,i)=>`<div class="callout" style="margin:8px 0"><strong>${i+1}.</strong> ${s}</div>`).join("");$("#fuel-question").textContent=f.question;
+    }
+    $$(".tab[data-fuel]").forEach(button=>button.addEventListener("click",()=>{$$(".tab[data-fuel]").forEach(x=>x.classList.toggle("active",x===button));renderFuel(button.dataset.fuel);}));
+    function drawEnergy(){
+      const canvas=$("#energy-chart"),rect=canvas.getBoundingClientRect();if(!rect.width)return;const dpr=window.devicePixelRatio||1;
+      canvas.width=rect.width*dpr;canvas.height=250*dpr;const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);ctx.clearRect(0,0,rect.width,250);
+      const vals=[Number($("#eff-u").value),Number($("#eff-th").value),Number($("#waste-factor").value)],labels=["اليورانيوم","الثوريوم","النفايات"],colors=["#168bd1","#168bd1","#d4a72c"],base=190;
+      vals.forEach((v,i)=>{const x=rect.width*(.2+i*.3),height=v/100*150;ctx.fillStyle=colors[i];ctx.fillRect(x-24,base-height,48,height);ctx.fillStyle="#45637c";ctx.textAlign="center";ctx.font="11px Tahoma";ctx.fillText(`${v}%`,x,base-height-8);ctx.fillText(labels[i],x,base+20);});
+      $("#eff-u-label").textContent=$("#eff-u").value+"%";$("#eff-th-label").textContent=$("#eff-th").value+"%";$("#waste-label").textContent=$("#waste-factor").value+"%";
+      $("#energy-result").textContent=`وفق افتراضاتك فقط: فرق الكفاءة ${Math.abs(vals[0]-vals[1])} نقطة مئوية، ومعامل النفايات النسبي ${vals[2]}%. لا تمثل القيم أداءً فعلياً لمنشأة.`;
+    }
+    ["#eff-u","#eff-th","#waste-factor"].forEach(id=>$(id).addEventListener("input",drawEnergy));
+    function drawEnergyInitial(){drawEnergy();}
+    $$(".map-point").forEach(point=>point.addEventListener("click",()=>selectCountry(point.dataset.country)));
+    function selectCountry(country){
+      selectedCountry=country;const data=countryData[country];$("#country-title").textContent=`موارد ${country}`;
+      $("#country-details").innerHTML=`<strong>اليورانيوم:</strong> ${data.u}<br><strong>الثوريوم:</strong> ${data.th}<br><strong>حالة البيانات:</strong> غير موثقة بعد<br><span class="small">${data.source}</span>`;
+      $$("#country-buttons button").forEach(b=>b.classList.toggle("active",b.textContent===country));
+    }
+    $("#country-buttons").innerHTML=Object.keys(countryData).map(c=>`<button type="button">${c}</button>`).join("");
+    $$("#country-buttons button").forEach(button=>button.addEventListener("click",()=>selectCountry(button.textContent)));
+    const timelineEvents=[
+      {max:1896,title:"1896 • اكتشاف النشاط الإشعاعي",text:"لاحظ هنري بيكريل أن أملاح اليورانيوم تُصدر إشعاعاً تلقائياً. شكّل ذلك بداية دراسة النشاط الإشعاعي.",term:"النشاط الإشعاعي: تحوّل تلقائي لبعض الأنوية غير المستقرة مع انبعاث إشعاع."},
+      {max:1938,title:"1898–1938 • تطور فهم الذرة",text:"شهدت العقود التالية اكتشاف عناصر وظواهر نووية جديدة، ثم فُهم الانشطار النووي في أواخر ثلاثينيات القرن العشرين.",term:"النظير: ذرات للعنصر نفسه تتساوى في عدد البروتونات وتختلف في عدد النيوترونات."},
+      {max:2000,title:"1939–2000 • تطبيقات وبحوث",text:"توسعت الأبحاث والتطبيقات المدنية للطاقة النووية، بالتوازي مع تطور معايير السلامة والرقابة الدولية.",term:"نصف العمر: الزمن اللازم لانخفاض عدد الأنوية غير المتحللة إلى النصف."},
+      {max:2026,title:"الحاضر • 2026",text:"تتواصل الأبحاث في أمان المفاعلات وإدارة النفايات ومصادر الطاقة منخفضة الانبعاثات، مع أهمية الشفافية والرقابة.",term:"دورة الوقود: المراحل العامة المرتبطة بإعداد الوقود واستخدامه وإدارة المواد الناتجة."},
+      {max:2100,title:"المستقبل • سيناريوهات تعليمية",text:"استكشف كيف يمكن أن تتغير أولويات البحث والطاقة بحلول 2030 وما بعدها. هذا تمرين تخيلي وليس توقعاً علمياً.",term:"الاستدامة: تلبية احتياجات الحاضر مع مراعاة الآثار والموارد على المدى البعيد."}
+    ];
+    function updateTimeline(){const year=Number($("#timeline-slider").value);$("#timeline-year").textContent=year;const event=timelineEvents.find(e=>year<=e.max)||timelineEvents[timelineEvents.length-1];$("#timeline-title").textContent=event.title;$("#timeline-text").textContent=event.text;$("#timeline-term").textContent=event.term;}
+    $("#timeline-slider").addEventListener("input",updateTimeline);
+    $$(".help").forEach(button=>button.addEventListener("click",()=>alert(button.dataset.help)));
+    const guideReplies=[
+      {keys:["نصف","عمر","كتلة"],text:"تلميح: قارن الزمن بنصف العمر أولاً. كم نصف عمر مرّ في إعدادك؟ ماذا يحدث للكتلة بعد كل فترة مماثلة؟"},
+      {keys:["ألفا","غاما","بيتا","إشعاع","نيوترون"],text:"ابدأ بمقارنة طبيعة الجسيم أو الموجة والشحنة والاختراق بشكل عام. أي خاصية تتوقع أن تفسر الفرق؟ زر (؟) في صفحة النظائر يعرض تعريفاً مبسطاً."},
+      {keys:["ثوريوم","يورانيوم","وقود"],text:"فكّر في مراحل دورة الوقود وما زال بحثياً وما هو مطبق. ما المصادر التي ستحتاجها قبل إجراء مقارنة عادلة؟"},
+      {keys:["طاقة","نفايات","كفاءة"],text:"انظر إلى الافتراضات في صفحة الطاقة والنفايات. إذا غيرت متغيراً واحداً فقط، كيف ستتغير المقارنة؟"},
+      {keys:["انفجار","سلاح","متفجر"],text:"لا أساعد في تصميم التفجيرات أو تغيير المواد لإحداثها. يمكنني مساعدتك في فهم التحويل المنضبط للطاقة أو السلامة النووية وإدارة النفايات."}
+    ];
+    function answerQuestion(text){
+      const q=text.trim();if(!q)return;
+      const log=$("#chat-log"),user=document.createElement("div");user.className="assistant-msg user";user.textContent=q;log.appendChild(user);
+      const lower=q.toLowerCase(),match=guideReplies.find(r=>r.keys.some(k=>lower.includes(k)));
+      const response=match?match.text:"ما الذي تعرفه بالفعل عن هذا الموضوع؟ حدّد متغيراً واحداً من التجربة، وتوقّع أثره قبل الضغط على زر الحساب.";
+      const reply=document.createElement("div");reply.className="assistant-msg";reply.textContent=response;log.appendChild(reply);$("#chat-input").value="";log.scrollTop=log.scrollHeight;
+    }
+    $("#send-question").addEventListener("click",()=>answerQuestion($("#chat-input").value));
+    $("#chat-input").addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();answerQuestion(event.currentTarget.value);}});
+    $$(".prompt").forEach(button=>button.addEventListener("click",()=>answerQuestion(button.dataset.prompt)));
+    function getNotes(){try{return JSON.parse(localStorage.getItem(notesKey)||"{}");}catch(error){console.error("تعذرت قراءة ملاحظات المختبر",error);return {};}}
+    function saveNotes(){
+      const data={name:$("#student-name").value.trim(),title:$("#experiment-title").value.trim(),hypothesis:$("#hypothesis").value.trim(),observations:$("#observations").value.trim()};
+      try{localStorage.setItem(notesKey,JSON.stringify(data));renderReport();toast("تم حفظ بيانات التقرير في هذا المتصفح.");}
+      catch(error){console.error("تعذر حفظ ملاحظات المختبر",error);toast("تعذر حفظ التقرير؛ تحقق من مساحة التخزين.");}
+    }
+    $("#save-notes").addEventListener("click",saveNotes);
+    function renderReport(){
+      const n=getNotes();$("#student-name").value=n.name||"";$("#experiment-title").value=n.title||"مقارنة نصف العمر للنظائر";$("#hypothesis").value=n.hypothesis||"";$("#observations").value=n.observations||"";
+      $$("[data-report=name]").forEach(el=>el.textContent=n.name||"—");$$("[data-report=title]").forEach(el=>el.textContent=n.title||"—");$$("[data-report=hypothesis]").forEach(el=>el.textContent=n.hypothesis||"—");$$("[data-report=observations]").forEach(el=>el.textContent=n.observations||"—");
+      $("#report-date").textContent=new Date().toLocaleDateString("ar");
+      try{const sim=JSON.parse(localStorage.getItem("nuclearLabLastSimulation")||"null");$("#report-simulation").textContent=sim?`${sim.isotope} • كتلة ابتدائية ${sim.mass} غ • زمن ${sim.years} سنة • الإشعاع المحدد: ${sim.radiation} • ${sim.result.replace(/\n/g," — ")}`:"لم تُحفظ محاكاة بعد.";}
+      catch(error){console.error("تعذر عرض المحاكاة في التقرير",error);$("#report-simulation").textContent="تعذر قراءة نتيجة المحاكاة المحفوظة.";}
+    }
+    $("#print-report").addEventListener("click",()=>{saveNotes();document.body.classList.add("print-report");window.print();document.body.classList.remove("print-report");});
+    $("#print-certificate").addEventListener("click",()=>{document.body.classList.add("print-cert");window.print();document.body.classList.remove("print-cert");});
+    const questions=[
+      {q:"ما المقصود بنصف العمر؟",a:["الزمن اللازم لتحلل كل المادة","الزمن اللازم لانخفاض عدد الأنوية غير المتحللة إلى النصف","كتلة النظير"],correct:1},
+      {q:"ما الجسيم الذي لا يحمل شحنة كهربائية؟",a:["ألفا","بيتا","النيوترون"],correct:2},
+      {q:"ما النظيران اللذان تتناولهما صفحات المختبر؟",a:["U-235 وTh-232","C-14 وH-2","O-16 وN-14"],correct:0},
+      {q:"هل قيم صفحة كفاءة الطاقة بيانات فعلية لمفاعل؟",a:["نعم، قياسات تشغيلية","لا، افتراضات تعليمية قابلة للتغيير","نعم، صالحة للتصميم"],correct:1},
+      {q:"ماذا يجب أن نضيف إلى بيانات موارد الدول قبل نشرها؟",a:["مصدر موثوق وسنة وتعريف القياس","لوناً مختلفاً","لا شيء"],correct:0}
+    ];
+    function renderQuiz(){
+      $("#quiz-form").innerHTML=questions.map((q,i)=>`<fieldset style="border:0;padding:8px 0;margin:8px 0;border-bottom:1px solid #e7eef3"><legend style="font-weight:bold;color:#173d60;font-size:13px">${i+1}. ${q.q}</legend>${q.a.map((a,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}">${a}</label>`).join("")}</fieldset>`).join("");
+      if(quizPassed){$("#cert-status").className="callout safe";$("#cert-status").textContent="تم فتح الشهادة — يمكنك طباعتها.";$("#print-certificate").disabled=false;}
+    }
+    $("#submit-quiz").addEventListener("click",()=>{
+      let score=0;questions.forEach((q,i)=>{const answer=$(`input[name="q${i}"]:checked`);if(answer&&Number(answer.value)===q.correct)score++;});
+      $("#quiz-result").classList.remove("hidden");$("#quiz-result").textContent=`نتيجتك: ${score} من ${questions.length}.`;
+      if(score>=4){quizPassed=true;localStorage.setItem(quizKey,"true");$("#cert-status").className="callout safe";$("#cert-status").textContent="مبروك! اجتزت الاختبار ويمكنك طباعة الشهادة.";$("#print-certificate").disabled=false;toast("أحسنت! أصبحت الشهادة متاحة.");}
+      else{$("#cert-status").className="callout warn";$("#cert-status").textContent="أعد مراجعة المفاهيم وحاول مرة أخرى.";toast("تحتاج إلى 4 إجابات صحيحة لفتح الشهادة.");}
+    });
+    $("#certificate-name").addEventListener("input",()=>{$("#cert-preview-name").textContent=$("#certificate-name").value.trim()||"اسم الباحث/ة";});
+    $("#print-certificate").addEventListener("click",()=>{document.body.classList.add("print-cert");window.print();document.body.classList.remove("print-cert");});
+    $("#report-date").textContent=new Date().toLocaleDateString("ar");
+    calculate();renderIsotopes();renderFuel("u");drawEnergyInitial();updateTimeline();renderQuiz();renderReport();renderRecords();
+  </script>
+</body>
+</html>
