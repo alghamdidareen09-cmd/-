@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0c4774">
-  <title>مختبر الطاقة النووية | اليورانيوم والثوريوم</title>
+  <title>مختبر الطاقة النووية | العناصر والنظائر</title>
   <style>
     :root {
       --navy: #103d66;
@@ -20,6 +20,8 @@
       --red: #cc4d53;
       --shadow: 0 12px 32px rgba(15, 62, 101, .09);
     }
+    body[data-theme="emerald"] { --navy:#14594f; --blue:#159b83; --sky:#75d8c0; --paper:#f2faf7; --line:#d6ebe4; --ink:#183d39; --muted:#5c8178; }
+    body[data-theme="sunset"] { --navy:#69404f; --blue:#ce6b55; --sky:#efaa72; --paper:#fff8f4; --line:#f0dfd5; --ink:#553846; --muted:#866877; }
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -45,6 +47,7 @@
       backdrop-filter: blur(12px);
     }
     .brand { display: flex; align-items: center; gap: 12px; min-width: 215px; }
+    .brand-logo { width: 62px; height: 52px; object-fit: cover; object-position: center 52%; border-radius: 9px; background: white; }
     .brand-mark {
       width: 45px; height: 45px; border-radius: 15px;
       display: grid; place-items: center; color: white;
@@ -82,8 +85,8 @@
     .hero {
       position: relative; overflow: hidden; border-radius: 22px;
       color: white; padding: clamp(24px,4vw,48px);
-      background: radial-gradient(circle at 86% 16%, #69c8ee 0, transparent 27%),
-                  linear-gradient(115deg, #0c365e 0%, #155e91 60%, #2189be 100%);
+      background: radial-gradient(circle at 86% 16%, var(--sky) 0, transparent 27%),
+                  linear-gradient(115deg, var(--navy) 0%, #155e91 60%, var(--blue) 100%);
       box-shadow: var(--shadow); margin-bottom: 24px;
     }
     .hero:after {
@@ -92,6 +95,7 @@
     }
     .eyebrow { color: #c9e8fa; font-size: 12px; font-weight: bold; letter-spacing: .4px; }
     h1 { margin: 5px 0 7px; line-height: 1.35; font-size: clamp(25px, 3vw, 38px); }
+    .hero h1 { font-size: clamp(38px, 5.2vw, 64px); line-height: 1.2; }
     .hero p { margin: 0; max-width: 670px; color: #e3f3fc; font-size: 14px; }
     .hero .button { position: relative; z-index: 1; margin-top: 20px; }
     .page-head { margin-bottom: 22px; }
@@ -104,23 +108,17 @@
     .card {
       background: var(--white); border: 1px solid var(--line);
       border-radius: 17px; padding: 19px; box-shadow: 0 5px 20px #103d6608;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
     }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: #b7d6e9; }
     .card h2, .card h3 { color: var(--navy); margin: 0 0 10px; font-size: 17px; }
     .card p { color: var(--muted); margin: 4px 0 12px; font-size: 13px; }
     .stat-card { position: relative; overflow: hidden; min-height: 123px; }
     .stat-card:after { content: ""; position: absolute; width: 75px; height: 75px; border-radius: 50%; left: -17px; bottom: -28px; background: #168bd110; }
     .stat-value { color: var(--navy); font-size: 25px; font-weight: bold; }
     .stat-title { color: var(--muted); font-size: 12px; }
-    .element-card { padding: 0; overflow: hidden; }
-    .element-card .element-top { padding: 16px; color: white; }
-    .element-card.uranium .element-top { background: linear-gradient(125deg,#168bd1,#0d527f); }
-    .element-card.thorium .element-top { background: linear-gradient(125deg,#e2b63e,#ab7812); }
-    .element-symbol { display: flex; align-items: center; justify-content: space-between; font-weight: bold; }
-    .element-symbol b { font-size: 36px; line-height: 1; }
-    .element-info { padding: 14px 16px; }
-    .element-info div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #edf2f6; font-size: 12px; }
-    .element-info div:last-child { border: 0; }
-    .element-info strong { color: var(--navy); }
+    .uses-element-name { display:inline-block; padding:7px 12px; border-radius:10px; color:#fff; background:#102f4ddd; text-shadow:0 1px 2px #0008; }
+    .uses-element-top .element-symbol span:last-child { padding:6px 10px; border-radius:9px; color:#fff; background:#102f4ddd; }
     .callout { background: #edf7fd; border: 1px solid #cee8f6; border-radius: 12px; padding: 13px 15px; color: #315e7d; font-size: 13px; }
     .callout.warn { background: #fff8e7; border-color: #f0dda6; color: #755a1a; }
     .callout.safe { background: #eaf8f4; border-color: #c8e9df; color: #286d5c; }
@@ -164,11 +162,31 @@
     .map-box { background: linear-gradient(180deg,#eaf6fd,#f8fbfe); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
     .map-box svg { width: 100%; display: block; }
     .continent { fill: #b8d3e3; stroke: #f8fcff; stroke-width: 2; }
-    .map-point { fill: var(--gold); stroke: white; stroke-width: 3; cursor: pointer; transition: r .15s; }
-    .map-point:hover { r: 10; }
-    .country-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
-    .country-buttons button { background: white; color: var(--navy); border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; font-size: 12px; }
-    .country-buttons button.active { background: var(--navy); color: white; }
+    .map-point { fill: var(--gold); stroke: white; stroke-width: 3; cursor: pointer; transition: r .2s, fill .2s, filter .2s; }
+    .map-point.resource-point { fill: var(--green); }
+    .map-point:hover, .map-point.active { r: 11; fill: var(--blue); filter: drop-shadow(0 0 7px #168bd188); }
+    .country-ranking { display:grid; gap:7px; max-height:310px; overflow:auto; margin-top:12px; }
+    .country-rank { display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:8px; width:100%; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); padding:8px; text-align:right; cursor:pointer; }
+    .country-rank:hover, .country-rank.active { background:#edf7fd; border-color:var(--blue); }
+    .rank-bar { height:5px; border-radius:9px; background:#e5eef4; margin-top:4px; overflow:hidden; }
+    .rank-bar i { display:block; height:100%; background:linear-gradient(90deg,var(--blue),var(--sky)); border-radius:inherit; }
+    .map-layout { align-items:start; }
+    .theme-controls { display:flex; align-items:center; gap:7px; }
+    .theme-controls select { width:auto; max-width:120px; padding:7px 8px; font-size:12px; }
+    .theme-controls input { width:34px; height:34px; padding:2px; border:1px solid var(--line); border-radius:9px; background:white; cursor:pointer; }
+    .ministry-mark { width:150px; max-width:45%; height:auto; display:block; margin:0 auto 12px; }
+    .about-box { margin-top:14px; border-top:1px solid var(--line); padding-top:10px; }
+    .about-box summary { color:var(--navy); font-weight:bold; cursor:pointer; }
+    .about-box p { color:var(--muted); font-size:12px; }
+    .about-card { position:relative; isolation:isolate; overflow:hidden; }
+    .about-card::before, .about-card::after { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; }
+    .about-card::before { background:linear-gradient(125deg,#e8f5fd,#fff 58%,#eaf8f3); animation:about-background-one 12s ease-in-out infinite; }
+    .about-card::after { background:linear-gradient(125deg,#fff5dc,#f1efff 58%,#eaf4fc); animation:about-background-two 12s ease-in-out infinite; }
+    @keyframes about-background-one { 0%,44% { opacity:1; } 56%,94% { opacity:0; } 100% { opacity:1; } }
+    @keyframes about-background-two { 0%,44% { opacity:0; } 56%,94% { opacity:1; } 100% { opacity:0; } }
+    .isotope-detail { margin-top:12px; }
+    .fade-in { animation: fade-in .38s ease both; }
+    @keyframes fade-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
     .assistant-msg { background: #f1f7fb; border-radius: 12px 12px 3px 12px; padding: 12px; color: #385973; font-size: 13px; margin: 10px 0; }
     .assistant-msg.user { background: #e7f4fc; color: var(--navy); margin-right: 15%; }
     .quiz-option { display: block; border: 1px solid var(--line); background: white; border-radius: 10px; padding: 10px; margin: 8px 0; cursor: pointer; font-size: 13px; }
@@ -193,10 +211,12 @@
       .grid.four { grid-template-columns: repeat(2,minmax(0,1fr)); }
     }
     @media(max-width: 640px) {
-      .brand { min-width: auto; } .brand small, .status-pill { display: none; }
+      .brand { min-width: auto; } .brand small, .status-pill { display: none; } .brand-logo { width:44px; height:40px; }
       .brand strong { font-size: 12px; } .brand-mark { width: 38px; height: 38px; }
       .topbar { padding: 10px 13px; } main { padding: 18px 13px 38px; }
+      .theme-controls select { max-width:86px; }
       .grid.two, .grid.three, .grid.four, .map-layout { grid-template-columns: 1fr; }
+      .hero h1 { font-size: clamp(34px, 9vw, 46px); }
       .rad-grid { grid-template-columns: repeat(2,1fr); }
       .field-row { grid-template-columns: 1fr; gap: 0; }
       .hero { border-radius: 16px; } .hero:after { font-size: 170px; top: 0; }
@@ -209,15 +229,23 @@
       body.print-report #app > section:not(#page-report) { display: none !important; }
       body.print-cert #app > section:not(#page-certificate) { display: none !important; }
     }
+    @media(prefers-reduced-motion:reduce) { *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
+      <img class="brand-logo" src="../images/تحميل شعار وزارة التعليم مع الرؤية 2030 الرسمي عالي الجودة SVG.jpeg" alt="شعار وزارة التعليم ورؤية 2030">
       <div class="brand-mark">⚛</div>
-      <div><strong>مختبر الطاقة النووية</strong><small>رحلة تعليمية في العناصر النووية</small></div>
+      <div><strong>مختبر الطاقة النووية NucliLab</strong><small>حيث تلتقي الطاقة النووية بالابتكار الرقمي</small></div>
     </div>
     <div class="top-actions">
+      <div class="theme-controls" aria-label="تخصيص مظهر الصفحة">
+        <label class="hidden" for="theme-select">اختيار الثيم</label>
+        <select id="theme-select" aria-label="اختيار الثيم"><option value="ocean">المحيط</option><option value="emerald">زمردي</option><option value="sunset">غروب</option></select>
+        <label class="hidden" for="accent-color">لون مخصص</label>
+        <input id="accent-color" type="color" value="#168bd1" aria-label="اختيار لون مخصص" title="اختيار لون مخصص">
+      </div>
       <span class="status-pill">محاكاة تعليمية آمنة</span>
       <button class="button gold" onclick="showPage('page-report')">إنشاء التقرير</button>
     </div>
@@ -228,7 +256,8 @@
       <nav class="nav-list" aria-label="التنقل بين صفحات المختبر">
         <button class="nav-link active" data-page="page-home"><span class="nav-icon">⌂</span>الرئيسية</button>
         <button class="nav-link" data-page="page-simulation"><span class="nav-icon">◉</span>المحاكاة والحسابات</button>
-        <button class="nav-link" data-page="page-radiation"><span class="nav-icon">☢</span>النظائر والإشعاع</button>
+        <button class="nav-link" data-page="page-radiation"><span class="nav-icon">☢</span>العناصر والنظائر</button>
+        <button class="nav-link" data-page="page-uses"><span class="nav-icon">⚗</span>استخدامات العناصر</button>
         <button class="nav-link" data-page="page-fuel"><span class="nav-icon">⟳</span>دورة الوقود</button>
         <button class="nav-link" data-page="page-energy"><span class="nav-icon">ϟ</span>الطاقة والنفايات</button>
         <button class="nav-link" data-page="page-map"><span class="nav-icon">◎</span>خريطة الموارد</button>
@@ -247,20 +276,14 @@
           <button class="button gold" onclick="showPage('page-simulation')">ابدأ التجربة ←</button>
         </div>
         <div class="grid four">
-          <div class="card stat-card"><div class="stat-value">10</div><div class="stat-title">صفحات وتجارب تعليمية</div></div>
-          <div class="card stat-card"><div class="stat-value">2</div><div class="stat-title">عنصران للمقارنة: U وTh</div></div>
+          <div class="card stat-card"><div class="stat-value">11</div><div class="stat-title">صفحة وتجارب تعليمية</div></div>
+          <div class="card stat-card"><div class="stat-value">15</div><div class="stat-title">عنصراً من سلسلة الأكتينيدات</div></div>
           <div class="card stat-card"><div class="stat-value">4</div><div class="stat-title">أنواع إشعاع للتعلّم</div></div>
           <div class="card stat-card"><div class="stat-value">∞</div><div class="stat-title">مساحة للأسئلة والاستكشاف</div></div>
         </div>
-        <div class="grid two" style="margin-top:16px">
-          <article class="card element-card uranium">
-            <div class="element-top"><div class="element-symbol"><span><b>U</b><br>اليورانيوم</span><span>92</span></div></div>
-            <div class="element-info"><div><span>نظير للمحاكاة</span><strong>يورانيوم-235</strong></div><div><span>نصف العمر التقريبي</span><strong>7.04 × 10⁸ سنة</strong></div></div>
-          </article>
-          <article class="card element-card thorium">
-            <div class="element-top"><div class="element-symbol"><span><b>Th</b><br>الثوريوم</span><span>90</span></div></div>
-            <div class="element-info"><div><span>نظير للمحاكاة</span><strong>ثوريوم-232</strong></div><div><span>نصف العمر التقريبي</span><strong>1.405 × 10¹⁰ سنة</strong></div></div>
-          </article>
+        <div class="card" style="margin-top:16px">
+          <h2>إدارة المدرسة والمعلمات</h2>
+          <p>مديرة المدرسة: <strong>ابتسام النجار</strong> • المعلمات: <strong>ماجدة خوجة</strong> و<strong>أريج الحربي</strong></p>
         </div>
         <div class="callout warn" style="margin-top:16px">الموقع تعليمي فقط؛ الحسابات تقريبية ولا تصلح لاتخاذ قرارات تشغيلية أو صحية أو هندسية. لا توجد محاكاة لتصميم انفجار أو تفاعلات مؤذية.</div>
       </section>
@@ -270,18 +293,21 @@
         <div class="grid two">
           <div class="card">
             <h2>إعدادات التجربة</h2>
-            <div class="field"><label for="isotope">اختر النظير</label><select id="isotope"><option value="u235">يورانيوم-235 (U-235)</option><option value="u238">يورانيوم-238 (U-238)</option><option value="th232">ثوريوم-232 (Th-232)</option></select></div>
+            <div class="field"><label for="sim-element">اختر العنصر</label><select id="sim-element"></select></div>
+            <div class="field"><label for="isotope">اختر النظير</label><select id="isotope"></select></div>
             <div class="field"><label for="mass">الكتلة الابتدائية (غرام)</label><input id="mass" type="number" min="0.001" step="0.1" value="100"></div>
             <div class="field"><label for="years">الزمن المنقضي (سنة)</label><input id="years" type="number" min="0" step="1" value="1000000000"></div>
+            <p class="small">للنظائر قصيرة العمر، أدخلي زمناً قريباً من نصف العمر المختار لملاحظة التغير بوضوح.</p>
             <div class="field"><label>نوع الإشعاع المراد دراسته <button class="help" data-help="ألفا: جسيمات نواتها هيليوم. بيتا: إلكترون أو بوزيترون. غاما: فوتونات عالية الطاقة. النيوترون: جسيم متعادل. لكل نوع خصائص مختلفة؛ الاختيار هنا للتعلّم فقط ولا يغيّر قانون نصف العمر." aria-label="شرح أنواع الإشعاع">؟</button></label><select id="sim-radiation"><option>ألفا (α)</option><option>بيتا (β)</option><option>غاما (γ)</option><option>نيوترونات (n)</option></select></div>
             <button class="button primary" id="calculate">احسب النتيجة</button>
             <div class="result" id="calc-result" aria-live="polite"></div>
           </div>
           <div class="card">
             <h2>منحنى التناقص الإشعاعي</h2>
-            <p>النسبة المتبقية عبر ثلاثة أنصاف أعمار للنظير المختار.</p>
+            <p>النشاط الإشعاعي المتبقي عبر ثلاثة أنصاف أعمار للنظير المختار.</p>
+            <div class="callout small" id="chart-activity" aria-live="polite"></div>
             <div class="chart-wrap"><canvas id="decay-chart" aria-label="رسم بياني للتناقص الإشعاعي"></canvas></div>
-            <div class="legend"><span><i class="dot" style="background:#168bd1"></i>الكتلة النسبية المتبقية</span></div>
+            <div class="legend"><span><i class="dot" style="background:#168bd1"></i>النشاط النسبي المتبقي</span><span><i class="dot" style="background:#d4a72c"></i>موضع الزمن المختار</span></div>
           </div>
         </div>
         <div class="grid three" style="margin-top:16px">
@@ -292,11 +318,14 @@
       </section>
 
       <section id="page-radiation" class="hidden">
-        <div class="page-head"><h1>النظائر والإشعاع</h1><p>تعرّف على النظائر واستخدامات العناصر والاختلاف المفاهيمي بين أنواع الإشعاع.</p></div>
+        <div class="page-head"><h1>العناصر النووية ونظائرها</h1><p>اختاري العنصر أولاً ثم النظير للاطلاع على نصف العمر والنشاط الإشعاعي النوعي التقريبي. يعرض الكتالوج نظائر ممثلة تعليمياً وليس كل النظائر المكتشفة.</p></div>
         <div class="card">
-          <h2>اختر العنصر والنظير</h2>
-          <div class="tab-row"><button class="tab active" data-element="uranium">اليورانيوم</button><button class="tab" data-element="thorium">الثوريوم</button></div>
-          <div class="grid two" id="isotope-info"></div>
+          <div class="field-row">
+            <div class="field"><label for="catalog-element">اختر العنصر</label><select id="catalog-element"></select></div>
+            <div class="field"><label for="catalog-isotope">اختر النظير</label><select id="catalog-isotope"></select></div>
+          </div>
+          <div id="isotope-info" class="isotope-detail"></div>
+          <div class="callout warn">النشاط النوعي (Bq/g) قيمة نظرية لعينة نقية من النظير، وليس جرعة إشعاعية أو حكماً على مستوى الخطر. تختلف الجرعة والتأثير باختلاف الكمية والظروف والتدريع.</div>
         </div>
         <div class="card" style="margin-top:16px">
           <h2>ما الذي يميّز أنواع الإشعاع؟ <button class="help" data-help="ألفا (α) نواة هيليوم موجبة؛ بيتا (β) إلكترون أو بوزيترون؛ غاما (γ) فوتون كهرومغناطيسي؛ النيوترون جسيم متعادل. تختلف قدرتها على التأيين والاختراق، وتخضع للتنظيم والوقاية المتخصصة." aria-label="شرح أنواع الإشعاع">؟</button></h2>
@@ -307,9 +336,14 @@
           <div id="radiation-description" class="callout"></div>
           <p class="small">المقارنة وصفية فقط، ولا تمثل تعريضاً فعلياً أو جرعات أو تغييراً نووياً قابلاً للتطبيق.</p>
         </div>
-        <div class="grid two" style="margin-top:16px">
-          <div class="card"><h2>استخدامات اليورانيوم</h2><p>يُستخدم اليورانيوم في بعض أنواع الوقود النووي، كما يُستخدم اليورانيوم المستنفد في تطبيقات صناعية محددة. جميع الاستخدامات تخضع لضوابط أمان وتنظيم صارمة.</p></div>
-          <div class="card"><h2>استخدامات الثوريوم</h2><p>يُدرس الثوريوم كخيار محتمل ضمن دورات وقود نووي متقدمة، وله تطبيقات تاريخية وصناعية محدودة. لا يعني ذلك أن كل دورة وقود منه جاهزة تجارياً.</p></div>
+      </section>
+
+      <section id="page-uses" class="hidden">
+        <div class="page-head"><h1>استخدامات العناصر النووية</h1><p>نظرة تعليمية موجزة إلى استخدامات مدنية وبحثية مختارة، مع مراعاة أن كثيراً من النظائر لا تستخدم إلا في منشآت مرخصة.</p></div>
+        <div class="card">
+          <div class="field"><label for="uses-element">اختاري العنصر</label><select id="uses-element"></select></div>
+          <div id="uses-content"></div>
+          <div class="callout warn">المعلومات للتثقيف العام؛ لا تتضمن إرشادات للتعامل مع المواد المشعة. الاستخدام الفعلي يخضع للأنظمة والرقابة المتخصصة.</div>
         </div>
       </section>
 
@@ -340,11 +374,12 @@
       </section>
 
       <section id="page-map" class="hidden">
-        <div class="page-head"><h1>خريطة موارد اليورانيوم والثوريوم</h1><p>اختر علامة أو دولة لعرض بطاقة بيانات الموارد والاحتياطي.</p></div>
-        <div class="callout warn" style="margin-bottom:16px">تنبيه بيانات: الأرقام في هذا النموذج غير مضافة بعد. يجب تعبئة الكميات من مصدر موثوق وتوثيق سنة القياس وتعريف «الموارد» و«الاحتياطي» قبل النشر.</div>
+        <div class="page-head"><h1>خريطة وإحصاءات إنتاج اليورانيوم</h1><p>اختاري دولة من الخريطة أو ترتيب الإنتاج لتكبير موقعها وإظهار بياناتها.</p></div>
+        <div class="callout" style="margin-bottom:16px">إنتاج المناجم لعام 2024 بالطن المتري من اليورانيوم (tU)، وفق بيانات الرابطة النووية العالمية. تمثل العلامات مواقع تقريبية على خريطة تعليمية مبسطة وليست حدوداً جغرافية أو خريطة للاحتياطيات.</div>
+        <div class="legend" style="margin:-7px 0 12px"><span><i class="dot" style="background:var(--gold)"></i>دولة لها إنتاج منجمي مدرج في ترتيب 2024</span><span><i class="dot" style="background:var(--green)"></i>السعودية: موارد واستكشاف، وليست ضمن ترتيب الإنتاج في هذه البيانات</span></div>
         <div class="map-layout">
           <div class="map-box">
-            <svg viewBox="0 0 800 410" role="img" aria-label="خريطة تفاعلية تقريبية لمواقع دول مختارة">
+            <svg id="resource-map" viewBox="0 0 800 410" role="img" aria-label="خريطة تفاعلية تقريبية لدول إنتاج وموارد اليورانيوم">
               <path class="continent" d="M72 91 114 66 161 73 187 99 171 124 149 136 136 166 108 177 86 153 61 134Z"/>
               <path class="continent" d="M166 190 202 204 220 236 212 276 195 326 177 348 161 315 154 274 141 242Z"/>
               <path class="continent" d="M342 90 381 70 421 78 440 96 426 116 391 120 377 143 347 135 329 113Z"/>
@@ -352,20 +387,35 @@
               <path class="continent" d="M426 92 472 70 532 73 574 90 624 88 675 111 708 144 679 163 635 154 606 176 566 166 538 186 500 167 470 181 450 151 430 132Z"/>
               <path class="continent" d="M631 253 665 244 696 263 690 290 659 302 634 284Z"/>
               <g class="map-hotspots">
-                <circle class="map-point" cx="138" cy="119" r="7" data-country="كندا"/><circle class="map-point" cx="190" cy="257" r="7" data-country="البرازيل"/>
-                <circle class="map-point" cx="405" cy="205" r="7" data-country="ناميبيا"/><circle class="map-point" cx="418" cy="190" r="7" data-country="النيجر"/>
-                <circle class="map-point" cx="508" cy="123" r="7" data-country="كازاخستان"/><circle class="map-point" cx="562" cy="122" r="7" data-country="الصين"/>
-                <circle class="map-point" cx="657" cy="277" r="7" data-country="أستراليا"/>
+                <circle class="map-point" cx="138" cy="119" r="7" data-country="كندا"><title>كندا</title></circle>
+                <circle class="map-point" cx="112" cy="132" r="7" data-country="الولايات المتحدة"><title>الولايات المتحدة</title></circle>
+                <circle class="map-point" cx="405" cy="205" r="7" data-country="ناميبيا"><title>ناميبيا</title></circle>
+                <circle class="map-point" cx="418" cy="190" r="7" data-country="النيجر"><title>النيجر</title></circle>
+                <circle class="map-point" cx="508" cy="123" r="7" data-country="كازاخستان"><title>كازاخستان</title></circle>
+                <circle class="map-point" cx="562" cy="122" r="7" data-country="الصين"><title>الصين</title></circle>
+                <circle class="map-point" cx="657" cy="277" r="7" data-country="أستراليا"><title>أستراليا</title></circle>
+                <circle class="map-point" cx="492" cy="135" r="7" data-country="أوزبكستان"><title>أوزبكستان</title></circle>
+                <circle class="map-point" cx="472" cy="97" r="7" data-country="روسيا"><title>روسيا</title></circle>
+                <circle class="map-point" cx="550" cy="166" r="7" data-country="الهند"><title>الهند</title></circle>
+                <circle class="map-point" cx="426" cy="222" r="7" data-country="جنوب أفريقيا"><title>جنوب أفريقيا</title></circle>
+                <circle class="map-point" cx="460" cy="143" r="7" data-country="أوكرانيا"><title>أوكرانيا</title></circle>
+                <circle class="map-point" cx="495" cy="180" r="7" data-country="باكستان"><title>باكستان</title></circle>
+                <circle class="map-point resource-point" cx="486" cy="163" r="7" data-country="السعودية"><title>السعودية — موارد واستكشاف، دون رقم إنتاج مدرج</title></circle>
               </g>
-              <text x="400" y="385" text-anchor="middle" fill="#68849b" font-size="12">مواقع توضيحية — انقر على إحدى العلامات</text>
+              <text x="400" y="385" text-anchor="middle" fill="#68849b" font-size="12">اختاري علامة لتكبير المنطقة • خريطة تخطيطية</text>
             </svg>
           </div>
           <div class="card">
-            <h2 id="country-title">بيانات الدولة</h2>
-            <div id="country-details" class="callout">اختر دولة من الخريطة أو القائمة لعرض بطاقة الموارد.</div>
-            <div class="country-buttons" id="country-buttons" style="margin-top:14px"></div>
+            <h2>ترتيب الدول حسب الإنتاج (2024)</h2>
+            <div id="country-ranking" class="country-ranking"></div>
+            <div class="about-box">
+              <h3 id="country-title">بيانات الدولة</h3>
+              <div id="country-details" class="callout">اختاري دولة من الخريطة أو الترتيب لعرض معلوماتها.</div>
+              <button type="button" class="button" id="reset-map" style="margin-top:10px">إظهار الخريطة كاملة</button>
+            </div>
           </div>
         </div>
+        <p class="small">المصدر: <a href="https://world-nuclear.org/information-library/nuclear-fuel-cycle/mining-of-uranium/world-uranium-mining-production" target="_blank" rel="noopener noreferrer">World Nuclear Association — World Uranium Mining Production</a> (بيانات 2024، جرى الاطلاع عليها في 2026). قد تُراجع الأرقام مع تحديث المصدر. الأرقام للإنتاج من المناجم وليست احتياطيات.</p>
       </section>
 
       <section id="page-timeline" class="hidden">
@@ -383,16 +433,16 @@
       </section>
 
       <section id="page-assistant" class="hidden">
-        <div class="page-head"><h1>المساعد التعليمي</h1><p>اطرح سؤالاً عن التجربة. المساعد يوجّهك بأسئلة وتلميحات بدلاً من تقديم حل جاهز.</p></div>
+        <div class="page-head"><h1>المساعد التعليمي</h1><p>اكتبي سؤالك، وسيحاول المساعد المحلي فهم موضوعه والرد عليه من معلومات المختبر.</p></div>
         <div class="grid two">
           <div class="card">
             <h2>اسأل وتعلّم</h2>
-            <div id="chat-log" aria-live="polite"><div class="assistant-msg">أهلاً! ما الذي ترغب في فهمه؟ جرّب أن تسأل: «كيف يؤثر نصف العمر؟» أو «ما الفرق بين ألفا وغاما؟»</div></div>
+            <div id="chat-log" aria-live="polite"><div class="assistant-msg">أهلاً! أنا مساعد تعليمي يعمل داخل الصفحة. أستطيع الإجابة عن أسئلة العناصر والنظائر ونصف العمر والإشعاع والاستخدامات والخريطة. اختاري موضوعاً واسأليني عنه.</div></div>
             <label class="field"><span class="hidden">اكتب سؤالك</span><textarea id="chat-input" rows="3" placeholder="اكتب سؤالك هنا..."></textarea></label>
             <button class="button primary" id="send-question">إرسال السؤال</button>
             <div class="tab-row"><button class="tab prompt" data-prompt="كيف يؤثر نصف العمر على الكتلة المتبقية؟">نصف العمر</button><button class="tab prompt" data-prompt="ما الفرق بين إشعاع ألفا وغاما؟">أنواع الإشعاع</button><button class="tab prompt" data-prompt="كيف أقارن بين الوقودين؟">دورة الوقود</button></div>
           </div>
-          <div class="card"><h2>طريقة التعلّم</h2><p>1. اكتب فكرتك أو ملاحظتك.</p><p>2. ستحصل على توجيه أو سؤال يساعدك على التفكير.</p><p>3. ارجع إلى صفحة المحاكاة واختبر فرضيتك.</p><div class="callout">هذه نسخة أولية بمساعد تعليمي ذي ردود إرشادية جاهزة، وليست خدمة ذكاء اصطناعي متصلة أو بديلاً عن معلّمك.</div><p class="small">لا ترسل بيانات شخصية أو معلومات حساسة.</p></div>
+          <div class="card"><h2>كيف يجيب المساعد؟</h2><p>يفهم كلمات السؤال ليعرف موضوعه، ثم يختار شرحاً مناسباً له. لذلك سؤال النظائر يأخذ جواباً مختلفاً عن سؤال نصف العمر أو استخدامات العناصر.</p><p>تتغيّر الأمثلة والتلميحات أيضاً حسب سؤالك ونتائج المحاكاة الحالية.</p><div class="callout">المساعد يعمل دون إنترنت أو مفتاح سري. معرفته محدودة بموضوعات المختبر؛ إذا سألتي عن موضوع بعيد عنها سيخبرك بذلك بدلاً من التخمين.</div><p class="small">لأسئلة السلامة أو المعلومات الدقيقة، راجعي معلمتك ومصدراً علمياً موثوقاً.</p></div>
         </div>
       </section>
 
@@ -428,68 +478,173 @@
           <div class="card"><h2>شهادة الإتمام</h2><div class="field"><label for="certificate-name">الاسم على الشهادة</label><input id="certificate-name" type="text" placeholder="اكتب الاسم الكامل"></div><div id="certificate-preview" class="certificate"><div>⚛ • مختبر الطاقة النووية • ⚛</div><h2>شهادة إتمام تجربة تعليمية</h2><p>تشهد المنصة بأن</p><div class="cert-name" id="cert-preview-name">اسم الباحث/ة</div><p>أتم/ت تجربة تعليمية حول اليورانيوم والثوريوم</p><div id="cert-status" class="callout warn">أكمل الاختبار لفتح الشهادة.</div></div><button class="button gold no-print" id="print-certificate" disabled style="margin-top:12px">طباعة الشهادة</button></div>
         </div>
       </section>
-      <div class="footer-note">مختبر تعليمي تجريبي • استعن بالمعلّم/ة والمراجع العلمية الموثوقة • 2026</div>
+      <div class="footer-note">
+        مختبر تعليمي تجريبي • استعن بالمعلّمات والمراجع العلمية الموثوقة • 2026
+        <details class="about-box">
+          <summary>من نحن</summary>
+          <div class="card about-card" style="margin-top:10px">
+            <img class="ministry-mark" src="../images/تحميل شعار وزارة التعليم مع الرؤية 2030 الرسمي عالي الجودة SVG.jpeg" alt="شعار وزارة التعليم ورؤية 2030">
+            <p>نحن طالبات الصف الثالث ثانوي من المدرسة الثانوية الثالثة عشر.</p>
+            <p><strong>إشراف المديرة:</strong> ابتسام النجار</p>
+            <p><strong>المعلمات:</strong> ماجدة خوجة، أريج الحربي</p>
+            <p><strong>إعداد الطالبات:</strong> دارين أحمد الغامدي، فدوه كريم الحرتاني، سيرين عصام المطري، ريوف أحمد فتيني، سارة سامر الغريبي.</p>
+          </div>
+        </details>
+      </div>
     </main>
   </div>
   <div id="toast" class="toast hidden" role="status"></div>
   <script>
-    const isotopeData = {
-      u235: { name: "يورانيوم-235", half: 7.04e8, halfLabel: "7.04 × 10⁸ سنة", element: "اليورانيوم", number: 92 },
-      u238: { name: "يورانيوم-238", half: 4.468e9, halfLabel: "4.468 × 10⁹ سنة", element: "اليورانيوم", number: 92 },
-      th232: { name: "ثوريوم-232", half: 1.405e10, halfLabel: "1.405 × 10¹⁰ سنة", element: "الثوريوم", number: 90 }
-    };
+    const elementData = [
+      { id:"actinium", name:"الأكتينيوم", symbol:"Ac", number:89, uses:"يُستخدم الأكتينيوم-225 في أبحاث الطب النووي، بينما تقتصر معظم نظائره على الاستخدامات البحثية المتخصصة." },
+      { id:"thorium", name:"الثوريوم", symbol:"Th", number:90, uses:"يُدرس الثوريوم-232 في أبحاث دورات الوقود النووي، كما أن تطبيقاته الصناعية محدودة وتتطلب رقابة مناسبة." },
+      { id:"protactinium", name:"البروتكتينيوم", symbol:"Pa", number:91, uses:"عنصر نادر ومشع؛ استخدامه الأساسي في الأبحاث العلمية ودراسة كيمياء العناصر الثقيلة." },
+      { id:"uranium", name:"اليورانيوم", symbol:"U", number:92, uses:"يُستخدم اليورانيوم في وقود بعض المفاعلات المدنية وفي الأبحاث الجيولوجية والعلمية، ضمن أنظمة مرخصة." },
+      { id:"neptunium", name:"النبتونيوم", symbol:"Np", number:93, uses:"عنصر اصطناعي مشع يُستخدم أساساً في الأبحاث ودراسة سلوك العناصر الثقيلة." },
+      { id:"plutonium", name:"البلوتونيوم", symbol:"Pu", number:94, uses:"تُستخدم بعض نظائره في أبحاث الطاقة والفضاء داخل تطبيقات شديدة التنظيم، وتبقى غالبية التعاملات محصورة بالجهات المختصة." },
+      { id:"americium", name:"الأمريسيوم", symbol:"Am", number:95, uses:"يُستخدم مقدار بالغ الصغر من أمريسيوم-241 في بعض كواشف الدخان المؤيّنة، كما يُستعمل في أجهزة قياس صناعية مرخصة." },
+      { id:"curium", name:"الكوريوم", symbol:"Cm", number:96, uses:"يُستخدم في الأبحاث العلمية وأجهزة قياس متخصصة، مع احتواء الإشعاع والتعامل المؤسسي المنظم." },
+      { id:"berkelium", name:"البركيليوم", symbol:"Bk", number:97, uses:"عنصر اصطناعي نادر يُنتج بكميات بحثية صغيرة لدراسة العناصر فائقة الثقل." },
+      { id:"californium", name:"الكاليفورنيوم", symbol:"Cf", number:98, uses:"تُستخدم مصادر الكاليفورنيوم-252 المختومة في تطبيقات بحثية وتحليلية متخصصة تحت رقابة صارمة." },
+      { id:"einsteinium", name:"الأينشتاينيوم", symbol:"Es", number:99, uses:"عنصر اصطناعي شديد الندرة؛ يقتصر استخدامه على الأبحاث الأساسية في الكيمياء والفيزياء النووية." },
+      { id:"fermium", name:"الفرميوم", symbol:"Fm", number:100, uses:"يُنتج بكميات ضئيلة جداً لأبحاث النوى والعناصر الثقيلة، ولا يملك استخدامات تجارية شائعة." },
+      { id:"mendelevium", name:"المندليفيوم", symbol:"Md", number:101, uses:"عنصر اصطناعي يستخدم في الأبحاث الأساسية حول الخواص النووية والكيميائية." },
+      { id:"nobelium", name:"النوبليوم", symbol:"No", number:102, uses:"عنصر اصطناعي قصير العمر مخصص لأبحاث تركيب النواة والعناصر فائقة الثقل." },
+      { id:"lawrencium", name:"اللورنسيوم", symbol:"Lr", number:103, uses:"عنصر اصطناعي نادر وقصير العمر؛ تقتصر دراسته على تجارب بحثية متخصصة." }
+    ];
+    const isotopeCatalog = [
+      {id:"ac225",element:"actinium",mass:225,half:9.92/365.25,halfLabel:"9.92 يوم"},
+      {id:"ac227",element:"actinium",mass:227,half:21.772,halfLabel:"21.772 سنة"},
+      {id:"th232",element:"thorium",mass:232,half:1.405e10,halfLabel:"1.405 × 10¹⁰ سنة"},
+      {id:"th230",element:"thorium",mass:230,half:7.54e4,halfLabel:"7.54 × 10⁴ سنة"},
+      {id:"th234",element:"thorium",mass:234,half:24.1/365.25,halfLabel:"24.1 يوم"},
+      {id:"pa231",element:"protactinium",mass:231,half:3.276e4,halfLabel:"3.276 × 10⁴ سنة"},
+      {id:"pa233",element:"protactinium",mass:233,half:26.97/365.25,halfLabel:"26.97 يوم"},
+      {id:"u235",element:"uranium",mass:235,half:7.04e8,halfLabel:"7.04 × 10⁸ سنة"},
+      {id:"u238",element:"uranium",mass:238,half:4.468e9,halfLabel:"4.468 × 10⁹ سنة"},
+      {id:"u234",element:"uranium",mass:234,half:2.455e5,halfLabel:"2.455 × 10⁵ سنة"},
+      {id:"np237",element:"neptunium",mass:237,half:2.144e6,halfLabel:"2.144 × 10⁶ سنة"},
+      {id:"np239",element:"neptunium",mass:239,half:2.356/365.25,halfLabel:"2.356 يوم"},
+      {id:"pu238",element:"plutonium",mass:238,half:87.7,halfLabel:"87.7 سنة"},
+      {id:"pu239",element:"plutonium",mass:239,half:24110,halfLabel:"24,110 سنة"},
+      {id:"pu240",element:"plutonium",mass:240,half:6561,halfLabel:"6,561 سنة"},
+      {id:"pu241",element:"plutonium",mass:241,half:14.3,halfLabel:"14.3 سنة"},
+      {id:"am241",element:"americium",mass:241,half:432.2,halfLabel:"432.2 سنة"},
+      {id:"am243",element:"americium",mass:243,half:7370,halfLabel:"7,370 سنة"},
+      {id:"cm242",element:"curium",mass:242,half:162.8/365.25,halfLabel:"162.8 يوم"},
+      {id:"cm244",element:"curium",mass:244,half:18.1,halfLabel:"18.1 سنة"},
+      {id:"bk247",element:"berkelium",mass:247,half:1380,halfLabel:"1,380 سنة"},
+      {id:"bk249",element:"berkelium",mass:249,half:330.6/365.25,halfLabel:"330.6 يوم"},
+      {id:"cf249",element:"californium",mass:249,half:351,halfLabel:"351 سنة"},
+      {id:"cf252",element:"californium",mass:252,half:2.645,halfLabel:"2.645 سنة"},
+      {id:"es252",element:"einsteinium",mass:252,half:471.7/365.25,halfLabel:"471.7 يوم"},
+      {id:"es253",element:"einsteinium",mass:253,half:20.47/365.25,halfLabel:"20.47 يوم"},
+      {id:"fm256",element:"fermium",mass:256,half:2.627/(24*365.25),halfLabel:"2.627 ساعة"},
+      {id:"fm257",element:"fermium",mass:257,half:100.5/365.25,halfLabel:"100.5 يوم"},
+      {id:"md258",element:"mendelevium",mass:258,half:51.5/365.25,halfLabel:"51.5 يوم"},
+      {id:"no259",element:"nobelium",mass:259,half:58/(60*24*365.25),halfLabel:"58 دقيقة"},
+      {id:"lr266",element:"lawrencium",mass:266,half:11/(24*365.25),halfLabel:"نحو 11 ساعة"}
+    ].map(isotope=>({...isotope, name:`${elementData.find(element=>element.id===isotope.element).name}-${isotope.mass}`, symbol:elementData.find(element=>element.id===isotope.element).symbol, number:elementData.find(element=>element.id===isotope.element).number}));
+    const isotopeData = Object.fromEntries(isotopeCatalog.map(isotope=>[isotope.id,isotope]));
     const radiationText = {
       alpha: "ألفا (α): جسيم ثقيل موجب الشحنة نسبياً، وقدرته على الاختراق أقل من غاما. يختلف أثره باختلاف المادة والظروف؛ هنا نعرض وصفاً علمياً عاماً فقط.",
       beta: "بيتا (β): إلكترون أو بوزيترون ينبعث في بعض التحولات النووية. خصائصه بين ألفا وغاما بصورة عامة، ولا يمثّل هذا العرض قياساً لجرعة.",
       gamma: "غاما (γ): فوتون كهرومغناطيسي عالي الطاقة، غير مشحون وعادةً أكثر اختراقاً من ألفا وبيتا. الحماية والتعامل الفعلي من اختصاص المختصين.",
       neutron: "النيوترونات جسيمات متعادلة قد تتفاعل مع النوى بطرق مختلفة. يقتصر هذا النموذج على التعريف ولا يحاكي تنشيط المواد أو شروطاً تشغيلية."
     };
-    const countryData = {
-      "كندا": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
-      "البرازيل": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
-      "ناميبيا": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
-      "النيجر": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
-      "كازاخستان": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
-      "الصين": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"},
-      "أستراليا": {u:"يُضاف من مصدر موثوق",th:"يُضاف من مصدر موثوق",source:"أضيفوا المصدر والسنة وتعريف الاحتياطي"}
-    };
+    const countryData = [
+      {name:"كازاخستان",production:23270,x:508,y:123},
+      {name:"كندا",production:14309,x:138,y:119},
+      {name:"ناميبيا",production:7333,x:405,y:205},
+      {name:"أستراليا",production:4598,x:657,y:277},
+      {name:"أوزبكستان",production:4000,x:492,y:135},
+      {name:"روسيا",production:2738,x:472,y:97},
+      {name:"الصين",production:1600,x:562,y:122},
+      {name:"النيجر",production:962,x:418,y:190},
+      {name:"الهند",production:500,x:550,y:166},
+      {name:"جنوب أفريقيا",production:200,x:426,y:222},
+      {name:"أوكرانيا",production:288,x:460,y:143},
+      {name:"باكستان",production:260,x:495,y:180},
+      {name:"الولايات المتحدة",production:155,x:112,y:132},
+      {name:"السعودية",production:null,x:486,y:163}
+    ].sort((a,b)=>b.production-a.production);
     const recordsKey = "nuclearLabRecordsV1";
     const notesKey = "nuclearLabNotesV1";
     const quizKey = "nuclearLabQuizPassedV1";
-    let selectedElement = "uranium", selectedRadiation = "alpha", selectedCountry = "", quizPassed = localStorage.getItem(quizKey) === "true";
+    let selectedRadiation = "alpha", selectedCountry = "", quizPassed = localStorage.getItem(quizKey) === "true";
     const $ = (selector, root=document) => root.querySelector(selector);
     const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
+    function applyTheme(theme) {
+      document.body.dataset.theme = theme;
+      $("#theme-select").value = theme;
+      const colors={ocean:"#168bd1",emerald:"#159b83",sunset:"#ce6b55"};
+      document.body.style.removeProperty("--blue");
+      document.documentElement.style.removeProperty("--blue");
+      $("#accent-color").value=colors[theme];
+      localStorage.setItem("nuclearLabTheme", theme);
+      localStorage.removeItem("nuclearLabAccent");
+    }
+    $("#theme-select").addEventListener("change",event=>applyTheme(event.target.value));
+    $("#accent-color").addEventListener("input",event=>{
+      document.body.style.setProperty("--blue",event.target.value);
+      localStorage.setItem("nuclearLabAccent",event.target.value);
+    });
+    const savedTheme=localStorage.getItem("nuclearLabTheme");
+    const savedAccent=localStorage.getItem("nuclearLabAccent");
+    if(savedTheme&&["ocean","emerald","sunset"].includes(savedTheme))applyTheme(savedTheme);
+    if(savedAccent&&/^#[0-9a-f]{6}$/i.test(savedAccent)){document.body.style.setProperty("--blue",savedAccent);$("#accent-color").value=savedAccent;}
     function toast(message) {
       const box = $("#toast"); box.textContent = message; box.classList.remove("hidden");
       clearTimeout(toast.timer); toast.timer = setTimeout(() => box.classList.add("hidden"), 2600);
     }
     function showPage(id) {
       $$("#app > section").forEach(section => section.classList.toggle("hidden", section.id !== id));
+      const active=$("#"+id); active.classList.remove("fade-in"); void active.offsetWidth; active.classList.add("fade-in");
       $$(".nav-link").forEach(link => link.classList.toggle("active", link.dataset.page === id));
       if (id === "page-report") { renderReport(); renderRecords(); }
+      if (id === "page-simulation") requestAnimationFrame(drawDecay);
+      if (id === "page-energy") requestAnimationFrame(drawEnergy);
       window.scrollTo({top:0, behavior:"smooth"});
     }
     $$(".nav-link").forEach(link => link.addEventListener("click", () => showPage(link.dataset.page)));
     function formatNum(value) { return new Intl.NumberFormat("ar", {maximumSignificantDigits:5}).format(value); }
+    function formatActivity(value) {
+      if (!Number.isFinite(value)) return "خارج النطاق";
+      if (value === 0) return "0";
+      return value >= 1e9 || value < 0.001 ? value.toExponential(3) : formatNum(value);
+    }
+    function specificActivity(isotope) {
+      const halfSeconds=isotope.half*365.25*24*60*60;
+      return (Math.LN2*6.02214076e23)/(isotope.mass*halfSeconds);
+    }
     function drawDecay() {
       const canvas = $("#decay-chart"), rect = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
       if (!rect.width) return;
       canvas.width = rect.width*dpr; canvas.height = 250*dpr;
       const ctx = canvas.getContext("2d"); ctx.scale(dpr,dpr);
-      const w=rect.width,h=250,p={l:42,r:12,t:15,b:35}, cw=w-p.l-p.r,ch=h-p.t-p.b;
+      const w=rect.width,h=250,p={l:42,r:12,t:34,b:35}, cw=w-p.l-p.r,ch=h-p.t-p.b;
       ctx.clearRect(0,0,w,h); ctx.font="11px Tahoma"; ctx.strokeStyle="#dce8f0"; ctx.fillStyle="#69849a"; ctx.lineWidth=1;
+      const selected=isotopeData[$("#isotope").value];
+      const years=Number($("#years").value),mass=Number($("#mass").value),activity=specificActivity(selected);
+      const fraction=Math.pow(.5,years/selected.half);
+      $("#chart-activity").textContent=`النشاط الابتدائي للكتلة المحددة: ${formatActivity(activity*mass)} Bq • النشاط المتبقي الآن: ${formatActivity(activity*mass*fraction)} Bq`;
+      ctx.fillStyle="#45637c";ctx.textAlign="left";ctx.fillText(`النشاط النسبي • A₀ = ${formatActivity(activity*mass)} Bq`,p.l,p.t-12);
       for(let i=0;i<=4;i++){ const y=p.t+ch*i/4; ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();ctx.fillText(`${100-i*25}%`,2,y+4); }
-      const selected=isotopeData[$("#isotope").value]; ctx.strokeStyle="#168bd1";ctx.lineWidth=3;ctx.beginPath();
+      ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue("--blue").trim()||"#168bd1";ctx.lineWidth=3;ctx.beginPath();
       for(let i=0;i<=100;i++){const x=i/100*3, y=Math.pow(.5,x)*100; const px=p.l+x/3*cw, py=p.t+(1-y/100)*ch; if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}
       ctx.stroke();ctx.fillStyle="#69849a";ctx.textAlign="center";
       [0,1,2,3].forEach(x=>ctx.fillText(`${x}×`,p.l+x/3*cw,h-10));
+      const elapsed=Math.min(3,Math.max(0,years/selected.half)),remaining=fraction;
+      const dotX=p.l+elapsed/3*cw,dotY=p.t+(1-remaining)*ch;
+      ctx.fillStyle="#d4a72c";ctx.beginPath();ctx.arc(dotX,dotY,5,0,Math.PI*2);ctx.fill();
       ctx.fillText(`الزمن بوحدة نصف عمر ${selected.name}`,w/2,h-1);ctx.textAlign="start";
     }
     function calculate() {
       const isotope=isotopeData[$("#isotope").value], mass=Number($("#mass").value), years=Number($("#years").value);
-      if (!Number.isFinite(mass) || mass <= 0 || !Number.isFinite(years) || years < 0) { toast("أدخل كتلة موجبة وزمناً غير سالب."); return; }
+      if (!isotope || !Number.isFinite(mass) || mass <= 0 || mass > 1e12 || !Number.isFinite(years) || years < 0) { toast("أدخل كتلة بين 0 و1,000,000,000,000 غرام وزمناً غير سالب."); return; }
       const fraction=Math.pow(0.5,years/isotope.half), remaining=mass*fraction;
-      $("#calc-result").innerHTML=`النظير: ${isotope.name}<br>نصف العمر: ${isotope.halfLabel}<br>الكتلة المتبقية تقريباً: <strong>${formatNum(remaining)} غ</strong> (${formatNum(fraction*100)}%)`;
+      const activity=specificActivity(isotope), totalActivity=activity*mass*fraction;
+      $("#calc-result").innerHTML=`النظير: ${isotope.name}<br>نصف العمر: ${isotope.halfLabel}<br>الكتلة المتبقية تقريباً: <strong>${formatNum(remaining)} غ</strong> (${formatNum(fraction*100)}%)<br>النشاط النوعي التقريبي: ${formatActivity(activity)} Bq/g<br>نشاط الكتلة المتبقية نظرياً: ${formatActivity(totalActivity)} Bq`;
       drawDecay();
     }
     $("#calculate").addEventListener("click",calculate);
@@ -509,18 +664,54 @@
     }
     function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
     $("#clear-records").addEventListener("click",()=>{if(confirm("هل تريد مسح سجل المحاكاة المحفوظ؟")){localStorage.removeItem(recordsKey);localStorage.removeItem("nuclearLabLastSimulation");renderRecords();renderReport();toast("تم مسح السجل.");}});
-    $$(".tab[data-element]").forEach(button=>button.addEventListener("click",()=>{selectedElement=button.dataset.element;$$(".tab[data-element]").forEach(x=>x.classList.toggle("active",x===button));renderIsotopes();}));
+    function fillElementOptions(select, selectedId) {
+      select.innerHTML=elementData.map(element=>`<option value="${element.id}">${element.name} (${element.symbol})</option>`).join("");
+      select.value=selectedId;
+    }
+    function fillIsotopeOptions(select, elementId, selectedId) {
+      const isotopes=isotopeCatalog.filter(isotope=>isotope.element===elementId);
+      select.innerHTML=isotopes.map(isotope=>`<option value="${isotope.id}">${isotope.name} (${isotope.symbol}-${isotope.mass})</option>`).join("");
+      select.value=isotopes.some(isotope=>isotope.id===selectedId)?selectedId:isotopes[0].id;
+    }
+    function renderSimulationIsotopes() {
+      const elementId=$("#sim-element").value, current=$("#isotope").value;
+      fillIsotopeOptions($("#isotope"),elementId,current);
+      calculate();
+    }
+    fillElementOptions($("#sim-element"),"uranium");
+    renderSimulationIsotopes();
+    $("#sim-element").addEventListener("change",renderSimulationIsotopes);
+
+    function renderCatalogIsotopes() {
+      const elementId=$("#catalog-element").value;
+      fillIsotopeOptions($("#catalog-isotope"),elementId,$("#catalog-isotope").value);
+      renderIsotopes();
+    }
     function renderIsotopes(){
-      const items=selectedElement==="uranium"?[isotopeData.u235,isotopeData.u238]:[isotopeData.th232];
-      $("#isotope-info").innerHTML=items.map(i=>`<article class="card element-card ${selectedElement}"><div class="element-top"><div class="element-symbol"><span><b>${selectedElement==="uranium"?"U":"Th"}</b><br>${i.element}</span><span>${i.number}</span></div></div><div class="element-info"><div><span>النظير</span><strong>${i.name}</strong></div><div><span>نصف العمر التقريبي</span><strong>${i.halfLabel}</strong></div><div><span>حالة العرض</span><strong>معلومة تعليمية</strong></div></div></article>`).join("");
+      const isotope=isotopeData[$("#catalog-isotope").value];
+      const element=elementData.find(item=>item.id===isotope.element);
+      $("#isotope-info").innerHTML=`<article class="card element-card"><div class="element-top" style="background:linear-gradient(125deg,var(--blue),var(--navy))"><div class="element-symbol"><span><b>${element.symbol}</b><br>${element.name}</span><span>${element.number}</span></div></div><div class="element-info"><div><span>النظير المحدد</span><strong>${isotope.name}</strong></div><div><span>عدد الكتلة</span><strong>${isotope.mass}</strong></div><div><span>نصف العمر</span><strong>${isotope.halfLabel}</strong></div><div><span>النشاط النوعي النظري</span><strong>${formatActivity(specificActivity(isotope))} Bq/g</strong></div></div></article>`;
       updateRadiation();
     }
+    fillElementOptions($("#catalog-element"),"uranium");
+    renderCatalogIsotopes();
+    $("#catalog-element").addEventListener("change",renderCatalogIsotopes);
+    $("#catalog-isotope").addEventListener("change",renderIsotopes);
+    fillElementOptions($("#uses-element"),"uranium");
+    function renderUses() {
+      const element=elementData.find(item=>item.id===$("#uses-element").value);
+      const isotopeList=isotopeCatalog.filter(isotope=>isotope.element===element.id).map(isotope=>`${isotope.symbol}-${isotope.mass}`).join("، ");
+      $("#uses-content").innerHTML=`<article class="card element-card" style="margin-bottom:14px"><div class="element-top uses-element-top" style="background:linear-gradient(125deg,var(--blue),var(--navy))"><div class="element-symbol"><span class="uses-element-name"><b>${element.symbol}</b><br>${element.name}</span><span>${element.number}</span></div></div><div class="element-info"><div><span>نظائر ممثلة في المختبر</span><strong>${isotopeList}</strong></div></div></article><div class="callout">${element.uses}</div>`;
+    }
+    $("#uses-element").addEventListener("change",renderUses);
+    renderUses();
     $$(".rad-choice").forEach(button=>button.addEventListener("click",()=>{selectedRadiation=button.dataset.rad;$$(".rad-choice").forEach(x=>x.classList.toggle("active",x===button));updateRadiation();}));
     $("#radiation-combo").addEventListener("change",updateRadiation);
     function updateRadiation(){
-      const names={alpha:"ألفا",beta:"بيتا",gamma:"غاما",neutron:"النيوترونات"};
       const intro=$("#radiation-combo").value==="combined"?"مقارنة مجتمعة للأنواع الأربعة: ":"";
-      $("#radiation-description").textContent=intro+(($("#radiation-combo").value==="combined")?Object.values(radiationText).join(" "):radiationText[selectedRadiation])+` العنصر المحدد: ${selectedElement==="uranium"?"اليورانيوم":"الثوريوم"}.`;
+      const isotope=isotopeData[$("#catalog-isotope").value];
+      const element=elementData.find(item=>item.id===$("#catalog-element").value);
+      $("#radiation-description").textContent=intro+(($("#radiation-combo").value==="combined")?Object.values(radiationText).join(" "):radiationText[selectedRadiation])+` العنصر المحدد: ${element.name}، والنظير: ${isotope.name}.`;
     }
     const fuelInfo={
       u:{title:"مسار اليورانيوم (نظرة عامة)",content:"يبدأ المسار من موارد اليورانيوم، ثم تمر المواد بمراحل إعداد وقود نووي وفق ضوابط تنظيمية، تليها مرحلة الاستخدام في مفاعل مناسب ثم إدارة الوقود المستهلك والنفايات.",steps:["الموارد والتعدين — لمحة عامة","إعداد الوقود — يخضع للرقابة","استخدام الطاقة — داخل منشآت مرخصة","إدارة الوقود المستهلك والنفايات"],question:"ما العوامل العلمية والاقتصادية والبيئية التي ينبغي مراعاتها عند تقييم دورة الوقود؟"},
@@ -534,21 +725,55 @@
     function drawEnergy(){
       const canvas=$("#energy-chart"),rect=canvas.getBoundingClientRect();if(!rect.width)return;const dpr=window.devicePixelRatio||1;
       canvas.width=rect.width*dpr;canvas.height=250*dpr;const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);ctx.clearRect(0,0,rect.width,250);
-      const vals=[Number($("#eff-u").value),Number($("#eff-th").value),Number($("#waste-factor").value)],labels=["اليورانيوم","الثوريوم","النفايات"],colors=["#168bd1","#168bd1","#d4a72c"],base=190;
+      const themeBlue=getComputedStyle(document.body).getPropertyValue("--blue").trim()||"#168bd1";
+      const vals=[Number($("#eff-u").value),Number($("#eff-th").value),Number($("#waste-factor").value)],labels=["اليورانيوم","الثوريوم","النفايات"],colors=[themeBlue,themeBlue,"#d4a72c"],base=190;
       vals.forEach((v,i)=>{const x=rect.width*(.2+i*.3),height=v/100*150;ctx.fillStyle=colors[i];ctx.fillRect(x-24,base-height,48,height);ctx.fillStyle="#45637c";ctx.textAlign="center";ctx.font="11px Tahoma";ctx.fillText(`${v}%`,x,base-height-8);ctx.fillText(labels[i],x,base+20);});
       $("#eff-u-label").textContent=$("#eff-u").value+"%";$("#eff-th-label").textContent=$("#eff-th").value+"%";$("#waste-label").textContent=$("#waste-factor").value+"%";
       $("#energy-result").textContent=`وفق افتراضاتك فقط: فرق الكفاءة ${Math.abs(vals[0]-vals[1])} نقطة مئوية، ومعامل النفايات النسبي ${vals[2]}%. لا تمثل القيم أداءً فعلياً لمنشأة.`;
     }
     ["#eff-u","#eff-th","#waste-factor"].forEach(id=>$(id).addEventListener("input",drawEnergy));
     function drawEnergyInitial(){drawEnergy();}
-    $$(".map-point").forEach(point=>point.addEventListener("click",()=>selectCountry(point.dataset.country)));
-    function selectCountry(country){
-      selectedCountry=country;const data=countryData[country];$("#country-title").textContent=`موارد ${country}`;
-      $("#country-details").innerHTML=`<strong>اليورانيوم:</strong> ${data.u}<br><strong>الثوريوم:</strong> ${data.th}<br><strong>حالة البيانات:</strong> غير موثقة بعد<br><span class="small">${data.source}</span>`;
-      $$("#country-buttons button").forEach(b=>b.classList.toggle("active",b.textContent===country));
+    function resetMap() {
+      $("#resource-map").setAttribute("viewBox","0 0 800 410");
+      selectedCountry="";
+      $$(".map-point").forEach(point=>point.classList.remove("active"));
+      $$(".country-rank").forEach(button=>button.classList.remove("active"));
+      $("#country-title").textContent="بيانات الدولة";
+      $("#country-details").textContent="اختاري دولة من الخريطة أو الترتيب لعرض معلوماتها.";
     }
-    $("#country-buttons").innerHTML=Object.keys(countryData).map(c=>`<button type="button">${c}</button>`).join("");
-    $$("#country-buttons button").forEach(button=>button.addEventListener("click",()=>selectCountry(button.textContent)));
+    function selectCountry(country) {
+      const data=countryData.find(item=>item.name===country);
+      if(!data)return;
+      selectedCountry=country;
+      const productionCountries=countryData.filter(item=>Number.isFinite(item.production));
+      const rank=productionCountries.findIndex(item=>item.name===country)+1;
+      if(Number.isFinite(data.production)) {
+        $("#country-title").textContent=`${country} • المرتبة ${formatNum(rank)}`;
+        $("#country-details").innerHTML=`الإنتاج المنجمي لليورانيوم في 2024: <strong>${formatNum(data.production)} طن متري من اليورانيوم (tU)</strong><br>المصدر: World Nuclear Association. هذه بيانات إنتاج سنوي وليست تقديراً للاحتياطيات.`;
+      } else {
+        $("#country-title").textContent="السعودية • موارد اليورانيوم";
+        $("#country-details").innerHTML="أُضيفت السعودية إلى الخريطة لوجود موارد يورانيوم وأعمال استكشاف لها. لم تُدرج لها كمية إنتاج منجمي في بيانات الدول لعام 2024 المستخدمة هنا؛ لذلك لا تظهر في ترتيب الإنتاج. وجود موارد أو استكشاف لا يعني تسجيل إنتاج منجمي في ذلك العام.";
+      }
+      const width=340,height=210;
+      const x=Math.max(0,Math.min(800-width,data.x-width/2));
+      const y=Math.max(0,Math.min(410-height,data.y-height/2));
+      $("#resource-map").setAttribute("viewBox",`${x} ${y} ${width} ${height}`);
+      $$(".map-point").forEach(point=>point.classList.toggle("active",point.dataset.country===country));
+      $$(".country-rank").forEach(button=>button.classList.toggle("active",button.dataset.country===country));
+    }
+    $("#country-ranking").innerHTML=countryData.filter(country=>Number.isFinite(country.production)).map((country,index)=>{
+      const width=country.production/countryData[0].production*100;
+      return `<button type="button" class="country-rank" data-country="${country.name}" aria-label="عرض ${country.name}، المرتبة ${index+1}، إنتاج ${country.production} طن"><span>${formatNum(index+1)}</span><span>${country.name}<span class="rank-bar"><i style="width:${width}%"></i></span></span><strong>${formatNum(country.production)} tU</strong></button>`;
+    }).join("");
+    $$(".country-rank").forEach(button=>button.addEventListener("click",()=>selectCountry(button.dataset.country)));
+    $$(".map-point").forEach(point=>{
+      point.setAttribute("tabindex","0");
+      point.setAttribute("role","button");
+      point.setAttribute("aria-label",`تكبير الخريطة على ${point.dataset.country}`);
+      point.addEventListener("click",()=>selectCountry(point.dataset.country));
+      point.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectCountry(point.dataset.country);}});
+    });
+    $("#reset-map").addEventListener("click",resetMap);
     const timelineEvents=[
       {max:1896,title:"1896 • اكتشاف النشاط الإشعاعي",text:"لاحظ هنري بيكريل أن أملاح اليورانيوم تُصدر إشعاعاً تلقائياً. شكّل ذلك بداية دراسة النشاط الإشعاعي.",term:"النشاط الإشعاعي: تحوّل تلقائي لبعض الأنوية غير المستقرة مع انبعاث إشعاع."},
       {max:1938,title:"1898–1938 • تطور فهم الذرة",text:"شهدت العقود التالية اكتشاف عناصر وظواهر نووية جديدة، ثم فُهم الانشطار النووي في أواخر ثلاثينيات القرن العشرين.",term:"النظير: ذرات للعنصر نفسه تتساوى في عدد البروتونات وتختلف في عدد النيوترونات."},
@@ -559,19 +784,75 @@
     function updateTimeline(){const year=Number($("#timeline-slider").value);$("#timeline-year").textContent=year;const event=timelineEvents.find(e=>year<=e.max)||timelineEvents[timelineEvents.length-1];$("#timeline-title").textContent=event.title;$("#timeline-text").textContent=event.text;$("#timeline-term").textContent=event.term;}
     $("#timeline-slider").addEventListener("input",updateTimeline);
     $$(".help").forEach(button=>button.addEventListener("click",()=>alert(button.dataset.help)));
-    const guideReplies=[
-      {keys:["نصف","عمر","كتلة"],text:"تلميح: قارن الزمن بنصف العمر أولاً. كم نصف عمر مرّ في إعدادك؟ ماذا يحدث للكتلة بعد كل فترة مماثلة؟"},
-      {keys:["ألفا","غاما","بيتا","إشعاع","نيوترون"],text:"ابدأ بمقارنة طبيعة الجسيم أو الموجة والشحنة والاختراق بشكل عام. أي خاصية تتوقع أن تفسر الفرق؟ زر (؟) في صفحة النظائر يعرض تعريفاً مبسطاً."},
-      {keys:["ثوريوم","يورانيوم","وقود"],text:"فكّر في مراحل دورة الوقود وما زال بحثياً وما هو مطبق. ما المصادر التي ستحتاجها قبل إجراء مقارنة عادلة؟"},
-      {keys:["طاقة","نفايات","كفاءة"],text:"انظر إلى الافتراضات في صفحة الطاقة والنفايات. إذا غيرت متغيراً واحداً فقط، كيف ستتغير المقارنة؟"},
-      {keys:["انفجار","سلاح","متفجر"],text:"لا أساعد في تصميم التفجيرات أو تغيير المواد لإحداثها. يمكنني مساعدتك في فهم التحويل المنضبط للطاقة أو السلامة النووية وإدارة النفايات."}
-    ];
-    function answerQuestion(text){
+    function normalizeQuestion(text) {
+      return text.toLowerCase().replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").trim();
+    }
+    function answerQuestion(text) {
       const q=text.trim();if(!q)return;
+      if(q.length>500){toast("اختصري السؤال إلى 500 حرف أو أقل.");return;}
       const log=$("#chat-log"),user=document.createElement("div");user.className="assistant-msg user";user.textContent=q;log.appendChild(user);
-      const lower=q.toLowerCase(),match=guideReplies.find(r=>r.keys.some(k=>lower.includes(k)));
-      const response=match?match.text:"ما الذي تعرفه بالفعل عن هذا الموضوع؟ حدّد متغيراً واحداً من التجربة، وتوقّع أثره قبل الضغط على زر الحساب.";
-      const reply=document.createElement("div");reply.className="assistant-msg";reply.textContent=response;log.appendChild(reply);$("#chat-input").value="";log.scrollTop=log.scrollHeight;
+      const normalized=normalizeQuestion(q);
+      const has=(...words)=>words.some(word=>normalized.includes(normalizeQuestion(word)));
+      const isotopeMention=isotopeCatalog.find(isotope=>normalized.includes(normalizeQuestion(`${isotope.symbol}-${isotope.mass}`))||normalized.includes(normalizeQuestion(`${isotope.symbol}${isotope.mass}`)));
+      const variants=options=>{
+        const seed=[...normalized].reduce((sum,char)=>(sum*31+char.charCodeAt(0))>>>0,7);
+        return options[seed%options.length];
+      };
+      let response;
+      if(has("انفجار","سلاح","قنبله","متفجر","اصنع","تصنيع")) {
+        response="لا أقدّم تعليمات لصنع سلاح أو إحداث انفجار. أستطيع بدلاً من ذلك شرح الاستخدامات المدنية للطاقة النووية أو مبادئ السلامة وإدارة النفايات.";
+      } else if(has("نصف العمر","نصف عمر","الكتله المتبقيه","كم تبقي","بعد كم")) {
+        const isotope=isotopeData[$("#isotope").value],years=Number($("#years").value),mass=Number($("#mass").value);
+        const fraction=Math.pow(.5,years/isotope.half);
+        response=variants([
+          `نصف العمر هو الزمن الذي تنخفض خلاله كمية النظير إلى النصف. في إعدادك الحالي اخترت ${isotope.name}: بعد ${formatNum(years)} سنة من كتلة ${formatNum(mass)} غرام، يتبقى تقريباً ${formatNum(mass*fraction)} غرام (${formatNum(fraction*100)}%).`,
+          `خلّينا نقرأ المحاكاة: النظير المختار ${isotope.name} ونصف عمره ${isotope.halfLabel}. عند الزمن الذي أدخلتِه (${formatNum(years)} سنة)، تحسب الصفحة بقاء نحو ${formatNum(mass*fraction)} غرام من أصل ${formatNum(mass)} غرام. كل نصف عمر جديد يقسم الكمية على اثنين.`,
+          `النتيجة تعتمد على النظير والزمن، لذلك ليست إجابة ثابتة لكل سؤال. في تجربتك الآن مرّ ما يعادل ${formatNum(years/isotope.half)} نصف عمر؛ والكتلة المتبقية نظرياً نحو ${formatNum(mass*fraction)} غرام.`
+        ]);
+      } else if(has("نشاط","قوه الاشعاع","بيكريل","جرعه")) {
+        const isotope=isotopeData[$("#isotope").value],activity=specificActivity(isotope);
+        response=`للنظير المختار ${isotope.name}، النشاط النوعي النظري نحو ${formatActivity(activity)} بيكريل لكل غرام. البيكريل يقيس عدد التحللات في الثانية، وليس الجرعة التي يتلقاها شخص؛ الجرعة تتأثر بعوامل أخرى ولا تحسبها هذه المحاكاة.`;
+      } else if(isotopeMention||has("نظير","نظائر","isotope")) {
+        response=isotopeMention
+          ? `هذا هو ${isotopeMention.name}، وهو نظير لعنصر ${elementData.find(element=>element.id===isotopeMention.element).name}. نصف عمره ${isotopeMention.halfLabel}، ونشاطه النوعي النظري ${formatActivity(specificActivity(isotopeMention))} بيكريل لكل غرام.`
+          : variants([
+          "النظائر ذرات للعنصر نفسه: لها العدد نفسه من البروتونات، لكنها تختلف في عدد النيوترونات. لذلك يبقى اسم العنصر ورقمه الذري كما هما، بينما يتغير عدد الكتلة.",
+          "تخيّلي العنصر عائلةً يحددها عدد البروتونات. أفراد العائلة (النظائر) متشابهون في البروتونات، لكن قد يختلف عدد النيوترونات؛ مثال ذلك اليورانيوم-235 واليورانيوم-238.",
+          "الفرق بين نظيرين يُكتب غالباً بعد اسم العنصر، مثل U-235 وU-238. كلاهما يورانيوم (92 بروتوناً)، لكن عدد النيوترونات مختلف."
+        ]);
+      } else if(has("الفا","بيتا","غاما","نيوترون","انواع الاشعاع","اشعاع")) {
+        response=variants([
+          "ألفا جسيم من بروتونين ونيوترونين، وبيتا إلكترون أو بوزيترون، أما غاما فهي موجة كهرومغناطيسية عالية الطاقة. النيوترون جسيم متعادل. اختيار النوع في المحاكاة للتعلّم ولا يغيّر حساب نصف العمر.",
+          "الفرق الأساسي في طبيعة الإشعاع: ألفا جسيم ثقيل، وبيتا إلكترون أو بوزيترون، وغاما فوتون، والنيوترون جسيم بلا شحنة. هل تريدين مقارنة نوعين محددين؟",
+          "في صفحة النظائر يمكنك اختيار ألفا أو بيتا أو غاما أو النيوترون لقراءة وصف كل نوع. تذكّري أن هذا شرح عام، وليس قياساً للجرعة أو دليلاً للتعامل مع مصادر إشعاع."
+        ]);
+      } else if(has("استخدام","يستخدم","فائده","امريسيوم","كاليفورنيوم","بلوتونيوم","ثوريوم","يورانيوم")&&!countryData.some(item=>has(item.name))) {
+        const element=elementData.find(item=>has(item.name,item.symbol))||elementData.find(item=>item.id===$("#uses-element").value);
+        response=`عن ${element.name}: ${element.uses} ستجدين في صفحة «استخدامات العناصر» أمثلة لعناصر أخرى.`;
+      } else if(has("دوله","دول","خريطه","انتاج","كازاخستان","كندا","ناميبيا","استراليا","السعوديه","سعوديه")||countryData.some(item=>has(item.name))) {
+        const country=countryData.find(item=>has(item.name));
+        response=country
+          ? Number.isFinite(country.production)
+            ? `تُظهر بيانات المختبر أن ${country.name} أنتجت ${formatNum(country.production)} طن متري من اليورانيوم من المناجم في 2024. هذه كمية إنتاج سنوي وليست احتياطياً.`
+            : "أُضيفت السعودية إلى الخريطة لوجود موارد يورانيوم وأعمال استكشاف لها. لم تُدرج لها كمية إنتاج منجمي في بيانات 2024 المستخدمة هنا، لذلك لا تظهر ضمن ترتيب المنتجين."
+          : `في بيانات المختبر لعام 2024، تتصدر كازاخستان الإنتاج المنجمي لليورانيوم بـ ${formatNum(countryData[0].production)} طن، تليها كندا بـ ${formatNum(countryData[1].production)} طن ثم ناميبيا بـ ${formatNum(countryData[2].production)} طن.`;
+      } else if(has("طاقه","كفاءه","نفايات","وقود","مفاعل")) {
+        response=variants([
+          "تعرض صفحة «الطاقة والنفايات» مقارنة تعليمية بافتراضات قابلة للتغيير، وليست قياسات حقيقية لمحطات. أما دورة الوقود فتشرح المراحل بصورة عامة فقط.",
+          "للمقارنة العادلة، غيّري عاملاً واحداً في صفحة الطاقة ولاحظي الرسم. القيم هناك افتراضية وليست أرقام تشغيل أو توصية لاختيار مفاعل.",
+          "دورة الوقود تشمل بصورة عامة الموارد وإعداد الوقود واستخدامه ثم إدارة المواد المستهلكة. تفاصيلها تختلف، ولذلك يعرض المختبر فكرة عامة لا تعليمات تشغيلية."
+        ]);
+      } else if(has("مرحبا","اهلا","السلام عليكم","من انت","ماذا تعرف")) {
+        response="أهلاً بك! أنا مساعد محلي صغير داخل المختبر. أستطيع شرح النظائر ونصف العمر وأنواع الإشعاع وبعض الاستخدامات وبيانات الخريطة. اكتبي مثلاً: ما الفرق بين النظيرين U-235 وU-238؟";
+      } else {
+        response=variants([
+          "لم أتعرف على موضوع السؤال بعد. معرفتي محصورة بموضوعات المختبر: النظائر، نصف العمر، النشاط الإشعاعي، أنواع الإشعاع، استخدامات العناصر، ودول الإنتاج. جرّبي إعادة صياغته بأحد هذه المواضيع.",
+          "هذا السؤال خارج المعلومات التي أعددتُها، ولا أريد أن أخمّن. أستطيع مساعدتك في العناصر الأكتينيدية أو النظائر أو نصف العمر أو الإشعاع أو خريطة إنتاج اليورانيوم.",
+          `لم أجد جواباً موثوقاً لهذا السؤال في معلومات المختبر. اسأليني سؤالاً محدداً مثل «ما نصف عمر ${isotopeData[$("#isotope").value].name}؟» أو «ما استخدامات الثوريوم؟».`
+        ]);
+      }
+      const reply=document.createElement("div");reply.className="assistant-msg";reply.textContent=response;log.appendChild(reply);
+      $("#chat-input").value="";log.scrollTop=log.scrollHeight;
     }
     $("#send-question").addEventListener("click",()=>answerQuestion($("#chat-input").value));
     $("#chat-input").addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();answerQuestion(event.currentTarget.value);}});
