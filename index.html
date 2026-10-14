@@ -29,9 +29,11 @@
       color: var(--ink);
       font-family: Tahoma, Arial, sans-serif;
       line-height: 1.7;
+      transition: background-color .3s ease, color .3s ease;
     }
     button, input, select, textarea { font: inherit; }
     button { cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
     .topbar {
       min-height: 76px;
       background: rgba(255,255,255,.96);
@@ -47,13 +49,17 @@
       backdrop-filter: blur(12px);
     }
     .brand { display: flex; align-items: center; gap: 12px; min-width: 215px; }
-    .brand-logo { width: 62px; height: 52px; object-fit: cover; object-position: center 52%; border-radius: 9px; background: white; }
+    .brand-institution { display:flex; flex-direction:column; align-items:center; flex:none; }
+    .brand-logo { width: 86px; height: 62px; object-fit: contain; object-position: center; border-radius: 9px; background: white; }
+    .school-name { color:var(--navy); font-size:10px; font-weight:700; line-height:1.35; text-align:center; white-space:nowrap; }
     .brand-mark {
       width: 45px; height: 45px; border-radius: 15px;
       display: grid; place-items: center; color: white;
       background: linear-gradient(145deg, var(--blue), var(--navy));
       font-size: 25px; box-shadow: 0 6px 16px #168bd13b;
+      transition: transform .3s ease, box-shadow .3s ease;
     }
+    .brand:hover .brand-mark { transform: rotate(-10deg) scale(1.06); box-shadow: 0 9px 22px #168bd155; }
     .brand strong { display: block; color: var(--navy); font-size: 15px; }
     .brand small { display: block; color: var(--muted); font-size: 11px; }
     .top-actions { display: flex; align-items: center; gap: 10px; }
@@ -62,9 +68,11 @@
       background: white; color: var(--navy); padding: 9px 14px;
       font-weight: 700; font-size: 13px;
     }
+    .button { transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, border-color .2s ease; }
     .button.primary { background: var(--navy); color: white; border-color: var(--navy); }
     .button.gold { background: #fff6dc; border-color: #f0d891; color: #765c12; }
-    .button:hover { transform: translateY(-1px); box-shadow: 0 5px 14px #103d6618; }
+    .button:hover { transform: translateY(-2px); box-shadow: 0 7px 18px #103d6626; }
+    .button:active { transform: translateY(0) scale(.98); }
     .layout { display: grid; grid-template-columns: 248px minmax(0,1fr); min-height: calc(100vh - 76px); }
     aside {
       background: #fff; border-left: 1px solid var(--line);
@@ -77,10 +85,13 @@
       border: 0; background: transparent; color: #4d6982;
       text-align: right; padding: 10px 12px; margin: 2px 0;
       border-radius: 11px; font-size: 13px; font-weight: 700;
+      transition: background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
     }
-    .nav-link:hover, .nav-link.active { background: #eaf5fc; color: var(--navy); }
+    .nav-link:hover, .nav-link.active { background: #eaf5fc; background: color-mix(in srgb, var(--blue) 10%, white); color: var(--navy); }
+    .nav-link:hover { transform: translateX(-3px); }
     .nav-link.active { box-shadow: inset -3px 0 var(--blue); }
-    .nav-icon { width: 21px; text-align: center; font-size: 17px; }
+    .nav-icon { width: 21px; text-align: center; font-size: 17px; transition: transform .2s ease; }
+    .nav-link:hover .nav-icon, .nav-link.active .nav-icon { transform: scale(1.15); }
     main { width: 100%; max-width: 1500px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 42px) 60px; }
     .hero {
       position: relative; overflow: hidden; border-radius: 22px;
@@ -88,11 +99,16 @@
       background: radial-gradient(circle at 86% 16%, var(--sky) 0, transparent 27%),
                   linear-gradient(115deg, var(--navy) 0%, #155e91 60%, var(--blue) 100%);
       box-shadow: var(--shadow); margin-bottom: 24px;
+      animation: hero-enter .65s cubic-bezier(.2,.75,.25,1) both;
     }
     .hero:after {
-      content: "⚛"; position: absolute; left: 5%; top: -52px;
-      color: #ffffff17; font-size: 250px; line-height: 1;
+      content: ""; position: absolute; left: 5%; top: -30px;
+      width: 250px; height: 250px; opacity: .12; pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='white' stroke-width='3'%3E%3Cellipse cx='50' cy='50' rx='43' ry='16'/%3E%3Cellipse cx='50' cy='50' rx='43' ry='16' transform='rotate(60 50 50)'/%3E%3Cellipse cx='50' cy='50' rx='43' ry='16' transform='rotate(120 50 50)'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='5' fill='white'/%3E%3C/svg%3E") center / contain no-repeat;
+      animation: atom-float 7s ease-in-out infinite;
     }
+    @keyframes hero-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes atom-float { 0%,100% { transform:translateY(0) rotate(-7deg); } 50% { transform:translateY(9px) rotate(7deg); } }
     .eyebrow { color: #c9e8fa; font-size: 12px; font-weight: bold; letter-spacing: .4px; }
     h1 { margin: 5px 0 7px; line-height: 1.35; font-size: clamp(25px, 3vw, 38px); }
     .hero h1 { font-size: clamp(38px, 5.2vw, 64px); line-height: 1.2; }
@@ -108,9 +124,9 @@
     .card {
       background: var(--white); border: 1px solid var(--line);
       border-radius: 17px; padding: 19px; box-shadow: 0 5px 20px #103d6608;
-      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+      transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
     }
-    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: #b7d6e9; }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: #b7d6e9; border-color: color-mix(in srgb, var(--blue) 35%, var(--line)); }
     .card h2, .card h3 { color: var(--navy); margin: 0 0 10px; font-size: 17px; }
     .card p { color: var(--muted); margin: 4px 0 12px; font-size: 13px; }
     .stat-card { position: relative; overflow: hidden; min-height: 123px; }
@@ -127,6 +143,7 @@
     input[type="number"], input[type="text"], textarea, select {
       width: 100%; border: 1px solid #ccdeeb; border-radius: 10px;
       background: white; padding: 10px 12px; color: var(--ink); outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
     }
     input:focus, textarea:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #168bd11b; }
     input[type="range"] { width: 100%; accent-color: var(--blue); }
@@ -141,10 +158,13 @@
     .tab {
       border: 1px solid var(--line); background: white; color: #48647c;
       border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: bold;
+      transition: transform .2s ease, color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
+    .tab:hover { transform: translateY(-2px); border-color: var(--blue); color: var(--navy); box-shadow: 0 4px 12px #103d6615; }
     .tab.active { background: var(--navy); border-color: var(--navy); color: white; }
     .rad-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-    .rad-choice { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: white; text-align: center; color: var(--navy); }
+    .rad-choice { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: white; text-align: center; color: var(--navy); transition: transform .2s ease, border-color .2s ease, background-color .2s ease, box-shadow .2s ease; }
+    .rad-choice:hover { transform: translateY(-3px); box-shadow: 0 6px 15px #103d661a; }
     .rad-choice.active { border-color: var(--blue); background: #eff9fe; box-shadow: 0 0 0 2px #168bd11b; }
     .rad-choice strong { display: block; font-size: 19px; }
     .rad-choice small { color: var(--muted); font-size: 11px; }
@@ -161,9 +181,10 @@
     .map-layout { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(260px,1fr); gap: 16px; }
     .map-box { background: linear-gradient(180deg,#eaf6fd,#f8fbfe); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
     .map-box svg { width: 100%; display: block; }
-    .continent { fill: #b8d3e3; stroke: #f8fcff; stroke-width: 2; }
+    .continent { fill:#b8d3e3; stroke:#f8fcff; stroke-width:2; }
     .map-point { fill: var(--gold); stroke: white; stroke-width: 3; cursor: pointer; transition: r .2s, fill .2s, filter .2s; }
     .map-point.resource-point { fill: var(--green); }
+    .map-point:focus { outline: none; stroke: #153c58; stroke-width: 4; }
     .map-point:hover, .map-point.active { r: 11; fill: var(--blue); filter: drop-shadow(0 0 7px #168bd188); }
     .country-ranking { display:grid; gap:7px; max-height:310px; overflow:auto; margin-top:12px; }
     .country-rank { display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:8px; width:100%; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); padding:8px; text-align:right; cursor:pointer; }
@@ -174,16 +195,7 @@
     .theme-controls { display:flex; align-items:center; gap:7px; }
     .theme-controls select { width:auto; max-width:120px; padding:7px 8px; font-size:12px; }
     .theme-controls input { width:34px; height:34px; padding:2px; border:1px solid var(--line); border-radius:9px; background:white; cursor:pointer; }
-    .ministry-mark { width:150px; max-width:45%; height:auto; display:block; margin:0 auto 12px; }
     .about-box { margin-top:14px; border-top:1px solid var(--line); padding-top:10px; }
-    .about-box summary { color:var(--navy); font-weight:bold; cursor:pointer; }
-    .about-box p { color:var(--muted); font-size:12px; }
-    .about-card { position:relative; isolation:isolate; overflow:hidden; }
-    .about-card::before, .about-card::after { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; }
-    .about-card::before { background:linear-gradient(125deg,#e8f5fd,#fff 58%,#eaf8f3); animation:about-background-one 12s ease-in-out infinite; }
-    .about-card::after { background:linear-gradient(125deg,#fff5dc,#f1efff 58%,#eaf4fc); animation:about-background-two 12s ease-in-out infinite; }
-    @keyframes about-background-one { 0%,44% { opacity:1; } 56%,94% { opacity:0; } 100% { opacity:1; } }
-    @keyframes about-background-two { 0%,44% { opacity:0; } 56%,94% { opacity:1; } 100% { opacity:0; } }
     .isotope-detail { margin-top:12px; }
     .fade-in { animation: fade-in .38s ease both; }
     @keyframes fade-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
@@ -202,25 +214,36 @@
     .footer-note { text-align: center; font-size: 11px; color: #8299ab; padding-top: 30px; }
     .toast { position: fixed; bottom: 22px; left: 22px; z-index: 30; background: var(--navy); color: white; padding: 11px 16px; border-radius: 11px; box-shadow: var(--shadow); font-size: 13px; }
     @media(max-width: 950px) {
+      .topbar { flex-wrap:wrap; gap:8px 18px; }
+      .top-actions { width:100%; justify-content:flex-end; }
       .layout { grid-template-columns: 1fr; }
-      aside { position: sticky; top: 76px; height: auto; padding: 8px; z-index: 8; border: 0; border-bottom: 1px solid var(--line); }
+      aside { position: sticky; top: 150px; height: auto; padding: 8px; z-index: 8; border: 0; border-bottom: 1px solid var(--line); }
       .nav-label { display: none; }
       .nav-list { display: flex; overflow-x: auto; gap: 4px; }
       .nav-link { white-space: nowrap; width: auto; padding: 8px 11px; }
       .nav-link.active { box-shadow: inset 0 -3px var(--blue); }
       .grid.four { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .hero:after { width:clamp(130px,24vw,210px); height:clamp(130px,24vw,210px); top:-8px; opacity:.09; }
     }
     @media(max-width: 640px) {
-      .brand { min-width: auto; } .brand small, .status-pill { display: none; } .brand-logo { width:44px; height:40px; }
+      .topbar { padding:10px 13px; }
+      .brand { min-width:0; gap:8px; } .brand small, .status-pill { display: none; } .brand-logo { width:62px; height:46px; }
+      .school-name { font-size:8px; }
       .brand strong { font-size: 12px; } .brand-mark { width: 38px; height: 38px; }
-      .topbar { padding: 10px 13px; } main { padding: 18px 13px 38px; }
+      .top-actions { justify-content:space-between; }
+      aside { top:130px; }
+      main { padding: 18px 13px 38px; }
       .theme-controls select { max-width:86px; }
       .grid.two, .grid.three, .grid.four, .map-layout { grid-template-columns: 1fr; }
       .hero h1 { font-size: clamp(34px, 9vw, 46px); }
       .rad-grid { grid-template-columns: repeat(2,1fr); }
       .field-row { grid-template-columns: 1fr; gap: 0; }
-      .hero { border-radius: 16px; } .hero:after { font-size: 170px; top: 0; }
+      .hero { border-radius: 16px; } .hero:after { width:110px; height:110px; top:4px; left:2%; }
       .page-head h1 { font-size: 23px; }
+    }
+    @media(max-width: 380px) {
+      .brand-mark { display:none; }
+      .brand strong { font-size:11px; }
     }
     @media print {
       body { background: white; } .topbar, aside, .no-print, .footer-note { display: none !important; }
@@ -235,7 +258,10 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <img class="brand-logo" src="../images/تحميل شعار وزارة التعليم مع الرؤية 2030 الرسمي عالي الجودة SVG.jpeg" alt="شعار وزارة التعليم ورؤية 2030">
+      <div class="brand-institution">
+        <img class="brand-logo" src="../images/تحميل شعار وزارة التعليم مع الرؤية 2030 الرسمي عالي الجودة SVG.jpeg" alt="شعار وزارة التعليم ورؤية 2030">
+        <span class="school-name">الثانوية الثالثة عشر</span>
+      </div>
       <div class="brand-mark">⚛</div>
       <div><strong>مختبر الطاقة النووية NucliLab</strong><small>حيث تلتقي الطاقة النووية بالابتكار الرقمي</small></div>
     </div>
@@ -277,7 +303,7 @@
         </div>
         <div class="grid four">
           <div class="card stat-card"><div class="stat-value">11</div><div class="stat-title">صفحة وتجارب تعليمية</div></div>
-          <div class="card stat-card"><div class="stat-value">15</div><div class="stat-title">عنصراً من سلسلة الأكتينيدات</div></div>
+          <div class="card stat-card"><div class="stat-value">7</div><div class="stat-title">عناصر مشعة مختارة</div></div>
           <div class="card stat-card"><div class="stat-value">4</div><div class="stat-title">أنواع إشعاع للتعلّم</div></div>
           <div class="card stat-card"><div class="stat-value">∞</div><div class="stat-title">مساحة للأسئلة والاستكشاف</div></div>
         </div>
@@ -295,7 +321,8 @@
             <h2>إعدادات التجربة</h2>
             <div class="field"><label for="sim-element">اختر العنصر</label><select id="sim-element"></select></div>
             <div class="field"><label for="isotope">اختر النظير</label><select id="isotope"></select></div>
-            <div class="field"><label for="mass">الكتلة الابتدائية (غرام)</label><input id="mass" type="number" min="0.001" step="0.1" value="100"></div>
+            <div class="field"><label for="mass">الكتلة الابتدائية (amu)</label><input id="mass" type="number" min="0.001" max="6.02214076e35" step="any" value="6.02214076e25"></div>
+            <p class="small">amu هي وحدة الكتلة الذرية. يبقى ناتج الكتلة بالوحدة نفسها، ويُحوّل إلى غرام داخلياً لحساب النشاط الكلي؛ أما النشاط النوعي فيُعرض بوحدة Bq/g.</p>
             <div class="field"><label for="years">الزمن المنقضي (سنة)</label><input id="years" type="number" min="0" step="1" value="1000000000"></div>
             <p class="small">للنظائر قصيرة العمر، أدخلي زمناً قريباً من نصف العمر المختار لملاحظة التغير بوضوح.</p>
             <div class="field"><label>نوع الإشعاع المراد دراسته <button class="help" data-help="ألفا: جسيمات نواتها هيليوم. بيتا: إلكترون أو بوزيترون. غاما: فوتونات عالية الطاقة. النيوترون: جسيم متعادل. لكل نوع خصائص مختلفة؛ الاختيار هنا للتعلّم فقط ولا يغيّر قانون نصف العمر." aria-label="شرح أنواع الإشعاع">؟</button></label><select id="sim-radiation"><option>ألفا (α)</option><option>بيتا (β)</option><option>غاما (γ)</option><option>نيوترونات (n)</option></select></div>
@@ -318,14 +345,14 @@
       </section>
 
       <section id="page-radiation" class="hidden">
-        <div class="page-head"><h1>العناصر النووية ونظائرها</h1><p>اختاري العنصر أولاً ثم النظير للاطلاع على نصف العمر والنشاط الإشعاعي النوعي التقريبي. يعرض الكتالوج نظائر ممثلة تعليمياً وليس كل النظائر المكتشفة.</p></div>
+        <div class="page-head"><h1>العناصر النووية ونظائرها</h1><p>اختاري العنصر أولاً ثم النظير للاطلاع على نصف العمر والنشاط الإشعاعي النوعي التقريبي. يضم الكتالوج البولونيوم والرادون والراديوم والأكتينيوم والثوريوم واليورانيوم والبلوتونيوم، مع نظائر ممثلة لا تشمل جميع النظائر المعروفة.</p></div>
         <div class="card">
           <div class="field-row">
             <div class="field"><label for="catalog-element">اختر العنصر</label><select id="catalog-element"></select></div>
             <div class="field"><label for="catalog-isotope">اختر النظير</label><select id="catalog-isotope"></select></div>
           </div>
           <div id="isotope-info" class="isotope-detail"></div>
-          <div class="callout warn">النشاط النوعي (Bq/g) قيمة نظرية لعينة نقية من النظير، وليس جرعة إشعاعية أو حكماً على مستوى الخطر. تختلف الجرعة والتأثير باختلاف الكمية والظروف والتدريع.</div>
+          <div class="callout warn">النشاط النوعي (Bq/g) قيمة نظرية لعينة نقية من النظير، وليس جرعة إشعاعية أو حكماً على مستوى الخطر. تختلف الجرعة والتأثير باختلاف الكمية والظروف والتدريع. أنصاف الأعمار المعروضة تقريبية، ومصدرها بيانات البنية والاضمحلال النووي في <a href="https://www.nndc.bnl.gov/nudat3/" target="_blank" rel="noopener noreferrer">NuDat 3 (NNDC/ENSDF)</a>.</div>
         </div>
         <div class="card" style="margin-top:16px">
           <h2>ما الذي يميّز أنواع الإشعاع؟ <button class="help" data-help="ألفا (α) نواة هيليوم موجبة؛ بيتا (β) إلكترون أو بوزيترون؛ غاما (γ) فوتون كهرومغناطيسي؛ النيوترون جسيم متعادل. تختلف قدرتها على التأيين والاختراق، وتخضع للتنظيم والوقاية المتخصصة." aria-label="شرح أنواع الإشعاع">؟</button></h2>
@@ -374,8 +401,8 @@
       </section>
 
       <section id="page-map" class="hidden">
-        <div class="page-head"><h1>خريطة وإحصاءات إنتاج اليورانيوم</h1><p>اختاري دولة من الخريطة أو ترتيب الإنتاج لتكبير موقعها وإظهار بياناتها.</p></div>
-        <div class="callout" style="margin-bottom:16px">إنتاج المناجم لعام 2024 بالطن المتري من اليورانيوم (tU)، وفق بيانات الرابطة النووية العالمية. تمثل العلامات مواقع تقريبية على خريطة تعليمية مبسطة وليست حدوداً جغرافية أو خريطة للاحتياطيات.</div>
+        <div class="page-head"><h1>خريطة وإحصاءات إنتاج اليورانيوم</h1><p>اختاري دولة من الخريطة أو ترتيب الإنتاج لعرض بياناتها وتكبير موقعها.</p></div>
+        <div class="callout" style="margin-bottom:16px">إنتاج المناجم لعام 2024 بالطن المتري من اليورانيوم (tU)، وفق بيانات الرابطة النووية العالمية. مواقع العلامات وأسماء الدول تقريبية على خريطة تعليمية وليست خريطة سياسية دقيقة أو خريطة للاحتياطيات.</div>
         <div class="legend" style="margin:-7px 0 12px"><span><i class="dot" style="background:var(--gold)"></i>دولة لها إنتاج منجمي مدرج في ترتيب 2024</span><span><i class="dot" style="background:var(--green)"></i>السعودية: موارد واستكشاف، وليست ضمن ترتيب الإنتاج في هذه البيانات</span></div>
         <div class="map-layout">
           <div class="map-box">
@@ -480,70 +507,39 @@
       </section>
       <div class="footer-note">
         مختبر تعليمي تجريبي • استعن بالمعلّمات والمراجع العلمية الموثوقة • 2026
-        <details class="about-box">
-          <summary>من نحن</summary>
-          <div class="card about-card" style="margin-top:10px">
-            <img class="ministry-mark" src="../images/تحميل شعار وزارة التعليم مع الرؤية 2030 الرسمي عالي الجودة SVG.jpeg" alt="شعار وزارة التعليم ورؤية 2030">
-            <p>نحن طالبات الصف الثالث ثانوي من المدرسة الثانوية الثالثة عشر.</p>
-            <p><strong>إشراف المديرة:</strong> ابتسام النجار</p>
-            <p><strong>المعلمات:</strong> ماجدة خوجة، أريج الحربي</p>
-            <p><strong>إعداد الطالبات:</strong> دارين أحمد الغامدي، فدوه كريم الحرتاني، سيرين عصام المطري، ريوف أحمد فتيني، سارة سامر الغريبي.</p>
-          </div>
-        </details>
       </div>
     </main>
   </div>
   <div id="toast" class="toast hidden" role="status"></div>
   <script>
     const elementData = [
-      { id:"actinium", name:"الأكتينيوم", symbol:"Ac", number:89, uses:"يُستخدم الأكتينيوم-225 في أبحاث الطب النووي، بينما تقتصر معظم نظائره على الاستخدامات البحثية المتخصصة." },
-      { id:"thorium", name:"الثوريوم", symbol:"Th", number:90, uses:"يُدرس الثوريوم-232 في أبحاث دورات الوقود النووي، كما أن تطبيقاته الصناعية محدودة وتتطلب رقابة مناسبة." },
-      { id:"protactinium", name:"البروتكتينيوم", symbol:"Pa", number:91, uses:"عنصر نادر ومشع؛ استخدامه الأساسي في الأبحاث العلمية ودراسة كيمياء العناصر الثقيلة." },
-      { id:"uranium", name:"اليورانيوم", symbol:"U", number:92, uses:"يُستخدم اليورانيوم في وقود بعض المفاعلات المدنية وفي الأبحاث الجيولوجية والعلمية، ضمن أنظمة مرخصة." },
-      { id:"neptunium", name:"النبتونيوم", symbol:"Np", number:93, uses:"عنصر اصطناعي مشع يُستخدم أساساً في الأبحاث ودراسة سلوك العناصر الثقيلة." },
-      { id:"plutonium", name:"البلوتونيوم", symbol:"Pu", number:94, uses:"تُستخدم بعض نظائره في أبحاث الطاقة والفضاء داخل تطبيقات شديدة التنظيم، وتبقى غالبية التعاملات محصورة بالجهات المختصة." },
-      { id:"americium", name:"الأمريسيوم", symbol:"Am", number:95, uses:"يُستخدم مقدار بالغ الصغر من أمريسيوم-241 في بعض كواشف الدخان المؤيّنة، كما يُستعمل في أجهزة قياس صناعية مرخصة." },
-      { id:"curium", name:"الكوريوم", symbol:"Cm", number:96, uses:"يُستخدم في الأبحاث العلمية وأجهزة قياس متخصصة، مع احتواء الإشعاع والتعامل المؤسسي المنظم." },
-      { id:"berkelium", name:"البركيليوم", symbol:"Bk", number:97, uses:"عنصر اصطناعي نادر يُنتج بكميات بحثية صغيرة لدراسة العناصر فائقة الثقل." },
-      { id:"californium", name:"الكاليفورنيوم", symbol:"Cf", number:98, uses:"تُستخدم مصادر الكاليفورنيوم-252 المختومة في تطبيقات بحثية وتحليلية متخصصة تحت رقابة صارمة." },
-      { id:"einsteinium", name:"الأينشتاينيوم", symbol:"Es", number:99, uses:"عنصر اصطناعي شديد الندرة؛ يقتصر استخدامه على الأبحاث الأساسية في الكيمياء والفيزياء النووية." },
-      { id:"fermium", name:"الفرميوم", symbol:"Fm", number:100, uses:"يُنتج بكميات ضئيلة جداً لأبحاث النوى والعناصر الثقيلة، ولا يملك استخدامات تجارية شائعة." },
-      { id:"mendelevium", name:"المندليفيوم", symbol:"Md", number:101, uses:"عنصر اصطناعي يستخدم في الأبحاث الأساسية حول الخواص النووية والكيميائية." },
-      { id:"nobelium", name:"النوبليوم", symbol:"No", number:102, uses:"عنصر اصطناعي قصير العمر مخصص لأبحاث تركيب النواة والعناصر فائقة الثقل." },
-      { id:"lawrencium", name:"اللورنسيوم", symbol:"Lr", number:103, uses:"عنصر اصطناعي نادر وقصير العمر؛ تقتصر دراسته على تجارب بحثية متخصصة." }
+      { id:"polonium", name:"البولونيوم", symbol:"Po", number:84, uses:"تقتصر تطبيقات نظائر البولونيوم على مصادر بحثية أو صناعية محكمة ومخصصة؛ البولونيوم-210 شديد السمية والإشعاع، ولا يجوز التعامل معه خارج الجهات المرخصة." },
+      { id:"radon", name:"الرادون", symbol:"Rn", number:86, uses:"يُدرس الرادون في الأبحاث الجيولوجية والبيئية لتتبع انتقال الغاز وقياسه. وهو غاز مشع قد يتراكم في المباني ويضر بالصحة، لذا يُقاس ويُدار وفق إرشادات الجهات المختصة." },
+      { id:"radium", name:"الراديوم", symbol:"Ra", number:88, uses:"يُستخدم الراديوم-223 في دواء إشعاعي لعلاج حالات محددة من سرطان البروستاتا تحت إشراف طبي متخصص؛ أما نظائره الأخرى فتُستخدم أساساً في الأبحاث والقياسات المرخصة." },
+      { id:"actinium", name:"الأكتينيوم", symbol:"Ac", number:89, uses:"يُدرس الأكتينيوم-225 في الطب النووي والعلاج الموجّه بألفا، وتخضع تطبيقاته الطبية والبحثية لإشراف متخصص وترخيص مناسب." },
+      { id:"thorium", name:"الثوريوم", symbol:"Th", number:90, uses:"يُدرس الثوريوم-232 في أبحاث دورة الوقود النووي والجيولوجيا؛ وهو مادة خصبة وليس وقوداً انشطارياً مباشراً بحد ذاته." },
+      { id:"uranium", name:"اليورانيوم", symbol:"U", number:92, uses:"يُستخدم اليورانيوم في وقود بعض المفاعلات المدنية، كما تُستخدم نظائره في الأبحاث الجيولوجية والعلمية ضمن أنظمة مرخصة." },
+      { id:"plutonium", name:"البلوتونيوم", symbol:"Pu", number:94, uses:"يُستخدم البلوتونيوم-238 في مولدات الطاقة للأجهزة الفضائية؛ وتُجرى أبحاث على نظائره الأخرى ضمن منشآت وأنظمة رقابية متخصصة." }
     ];
     const isotopeCatalog = [
+      {id:"po209",element:"polonium",mass:209,half:122.9,halfLabel:"122.9 سنة"},
+      {id:"po210",element:"polonium",mass:210,half:138.3763/365.25,halfLabel:"138.3763 يوم"},
+      {id:"rn220",element:"radon",mass:220,half:55.6/(60*60*24*365.25),halfLabel:"55.6 ثانية"},
+      {id:"rn222",element:"radon",mass:222,half:3.8222/365.25,halfLabel:"3.8222 يوم"},
+      {id:"ra224",element:"radium",mass:224,half:3.66/365.25,halfLabel:"3.66 يوم"},
+      {id:"ra226",element:"radium",mass:226,half:1603,halfLabel:"1603 سنة"},
       {id:"ac225",element:"actinium",mass:225,half:9.92/365.25,halfLabel:"9.92 يوم"},
       {id:"ac227",element:"actinium",mass:227,half:21.772,halfLabel:"21.772 سنة"},
-      {id:"th232",element:"thorium",mass:232,half:1.405e10,halfLabel:"1.405 × 10¹⁰ سنة"},
-      {id:"th230",element:"thorium",mass:230,half:7.54e4,halfLabel:"7.54 × 10⁴ سنة"},
-      {id:"th234",element:"thorium",mass:234,half:24.1/365.25,halfLabel:"24.1 يوم"},
-      {id:"pa231",element:"protactinium",mass:231,half:3.276e4,halfLabel:"3.276 × 10⁴ سنة"},
-      {id:"pa233",element:"protactinium",mass:233,half:26.97/365.25,halfLabel:"26.97 يوم"},
+      {id:"th232",element:"thorium",mass:232,half:1.4e10,halfLabel:"1.40 × 10¹⁰ سنة"},
+      {id:"th230",element:"thorium",mass:230,half:7.538e4,halfLabel:"7.538 × 10⁴ سنة"},
+      {id:"th234",element:"thorium",mass:234,half:24.10/365.25,halfLabel:"24.10 يوم"},
       {id:"u235",element:"uranium",mass:235,half:7.04e8,halfLabel:"7.04 × 10⁸ سنة"},
       {id:"u238",element:"uranium",mass:238,half:4.468e9,halfLabel:"4.468 × 10⁹ سنة"},
       {id:"u234",element:"uranium",mass:234,half:2.455e5,halfLabel:"2.455 × 10⁵ سنة"},
-      {id:"np237",element:"neptunium",mass:237,half:2.144e6,halfLabel:"2.144 × 10⁶ سنة"},
-      {id:"np239",element:"neptunium",mass:239,half:2.356/365.25,halfLabel:"2.356 يوم"},
       {id:"pu238",element:"plutonium",mass:238,half:87.7,halfLabel:"87.7 سنة"},
       {id:"pu239",element:"plutonium",mass:239,half:24110,halfLabel:"24,110 سنة"},
       {id:"pu240",element:"plutonium",mass:240,half:6561,halfLabel:"6,561 سنة"},
-      {id:"pu241",element:"plutonium",mass:241,half:14.3,halfLabel:"14.3 سنة"},
-      {id:"am241",element:"americium",mass:241,half:432.2,halfLabel:"432.2 سنة"},
-      {id:"am243",element:"americium",mass:243,half:7370,halfLabel:"7,370 سنة"},
-      {id:"cm242",element:"curium",mass:242,half:162.8/365.25,halfLabel:"162.8 يوم"},
-      {id:"cm244",element:"curium",mass:244,half:18.1,halfLabel:"18.1 سنة"},
-      {id:"bk247",element:"berkelium",mass:247,half:1380,halfLabel:"1,380 سنة"},
-      {id:"bk249",element:"berkelium",mass:249,half:330.6/365.25,halfLabel:"330.6 يوم"},
-      {id:"cf249",element:"californium",mass:249,half:351,halfLabel:"351 سنة"},
-      {id:"cf252",element:"californium",mass:252,half:2.645,halfLabel:"2.645 سنة"},
-      {id:"es252",element:"einsteinium",mass:252,half:471.7/365.25,halfLabel:"471.7 يوم"},
-      {id:"es253",element:"einsteinium",mass:253,half:20.47/365.25,halfLabel:"20.47 يوم"},
-      {id:"fm256",element:"fermium",mass:256,half:2.627/(24*365.25),halfLabel:"2.627 ساعة"},
-      {id:"fm257",element:"fermium",mass:257,half:100.5/365.25,halfLabel:"100.5 يوم"},
-      {id:"md258",element:"mendelevium",mass:258,half:51.5/365.25,halfLabel:"51.5 يوم"},
-      {id:"no259",element:"nobelium",mass:259,half:58/(60*24*365.25),halfLabel:"58 دقيقة"},
-      {id:"lr266",element:"lawrencium",mass:266,half:11/(24*365.25),halfLabel:"نحو 11 ساعة"}
+      {id:"pu241",element:"plutonium",mass:241,half:14.290,halfLabel:"14.290 سنة"}
     ].map(isotope=>({...isotope, name:`${elementData.find(element=>element.id===isotope.element).name}-${isotope.mass}`, symbol:elementData.find(element=>element.id===isotope.element).symbol, number:elementData.find(element=>element.id===isotope.element).number}));
     const isotopeData = Object.fromEntries(isotopeCatalog.map(isotope=>[isotope.id,isotope]));
     const radiationText = {
@@ -617,6 +613,8 @@
       const halfSeconds=isotope.half*365.25*24*60*60;
       return (Math.LN2*6.02214076e23)/(isotope.mass*halfSeconds);
     }
+    const amuToGrams=1.66053906660e-24;
+    const maxSampleGrams=1e12;
     function drawDecay() {
       const canvas = $("#decay-chart"), rect = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
       if (!rect.width) return;
@@ -627,8 +625,9 @@
       const selected=isotopeData[$("#isotope").value];
       const years=Number($("#years").value),mass=Number($("#mass").value),activity=specificActivity(selected);
       const fraction=Math.pow(.5,years/selected.half);
-      $("#chart-activity").textContent=`النشاط الابتدائي للكتلة المحددة: ${formatActivity(activity*mass)} Bq • النشاط المتبقي الآن: ${formatActivity(activity*mass*fraction)} Bq`;
-      ctx.fillStyle="#45637c";ctx.textAlign="left";ctx.fillText(`النشاط النسبي • A₀ = ${formatActivity(activity*mass)} Bq`,p.l,p.t-12);
+      const initialActivity=activity*mass*amuToGrams;
+      $("#chart-activity").textContent=`النشاط الابتدائي للكتلة المحددة: ${formatActivity(initialActivity)} Bq • النشاط المتبقي الآن: ${formatActivity(initialActivity*fraction)} Bq`;
+      ctx.fillStyle="#45637c";ctx.textAlign="left";ctx.fillText(`النشاط النسبي • A₀ = ${formatActivity(initialActivity)} Bq`,p.l,p.t-12);
       for(let i=0;i<=4;i++){ const y=p.t+ch*i/4; ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();ctx.fillText(`${100-i*25}%`,2,y+4); }
       ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue("--blue").trim()||"#168bd1";ctx.lineWidth=3;ctx.beginPath();
       for(let i=0;i<=100;i++){const x=i/100*3, y=Math.pow(.5,x)*100; const px=p.l+x/3*cw, py=p.t+(1-y/100)*ch; if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}
@@ -641,10 +640,10 @@
     }
     function calculate() {
       const isotope=isotopeData[$("#isotope").value], mass=Number($("#mass").value), years=Number($("#years").value);
-      if (!isotope || !Number.isFinite(mass) || mass <= 0 || mass > 1e12 || !Number.isFinite(years) || years < 0) { toast("أدخل كتلة بين 0 و1,000,000,000,000 غرام وزمناً غير سالب."); return; }
+      if (!isotope || !Number.isFinite(mass) || mass <= 0 || mass*amuToGrams > maxSampleGrams || !Number.isFinite(years) || years < 0) { toast("أدخلي كتلة موجبة لا تتجاوز 6.022 × 10³⁵ amu وزمناً غير سالب."); return; }
       const fraction=Math.pow(0.5,years/isotope.half), remaining=mass*fraction;
-      const activity=specificActivity(isotope), totalActivity=activity*mass*fraction;
-      $("#calc-result").innerHTML=`النظير: ${isotope.name}<br>نصف العمر: ${isotope.halfLabel}<br>الكتلة المتبقية تقريباً: <strong>${formatNum(remaining)} غ</strong> (${formatNum(fraction*100)}%)<br>النشاط النوعي التقريبي: ${formatActivity(activity)} Bq/g<br>نشاط الكتلة المتبقية نظرياً: ${formatActivity(totalActivity)} Bq`;
+      const activity=specificActivity(isotope), totalActivity=activity*mass*amuToGrams*fraction;
+      $("#calc-result").innerHTML=`النظير: ${isotope.name}<br>نصف العمر: ${isotope.halfLabel}<br>الكتلة المتبقية تقريباً: <strong>${formatNum(remaining)} amu</strong> (${formatNum(fraction*100)}%)<br>النشاط النوعي التقريبي: ${formatActivity(activity)} Bq/g<br>نشاط الكتلة المتبقية نظرياً: ${formatActivity(totalActivity)} Bq`;
       drawDecay();
     }
     $("#calculate").addEventListener("click",calculate);
@@ -653,7 +652,7 @@
     window.addEventListener("resize",()=>{drawDecay();drawEnergy();});
     function getRecords(){try{return JSON.parse(localStorage.getItem(recordsKey)||"[]");}catch(error){console.error("تعذر قراءة سجل المختبر",error);return [];}}
     function saveSimulation(){
-      const iso=isotopeData[$("#isotope").value], record={date:new Date().toLocaleString("ar"),isotope:iso.name,mass:Number($("#mass").value),years:Number($("#years").value),radiation:$("#sim-radiation").value,result:$("#calc-result").innerText};
+      const iso=isotopeData[$("#isotope").value], record={date:new Date().toLocaleString("ar"),isotope:iso.name,mass:Number($("#mass").value),massUnit:"amu",years:Number($("#years").value),radiation:$("#sim-radiation").value,result:$("#calc-result").innerText};
       const records=getRecords();records.unshift(record);
       try{localStorage.setItem(recordsKey,JSON.stringify(records));localStorage.setItem("nuclearLabLastSimulation",JSON.stringify(record));toast("تم حفظ بيانات المحاكاة في هذا المتصفح.");renderRecords();renderReport();}
       catch(error){console.error("تعذر حفظ بيانات المختبر",error);toast("تعذر الحفظ؛ تحقق من مساحة التخزين في المتصفح.");}
@@ -690,7 +689,7 @@
     function renderIsotopes(){
       const isotope=isotopeData[$("#catalog-isotope").value];
       const element=elementData.find(item=>item.id===isotope.element);
-      $("#isotope-info").innerHTML=`<article class="card element-card"><div class="element-top" style="background:linear-gradient(125deg,var(--blue),var(--navy))"><div class="element-symbol"><span><b>${element.symbol}</b><br>${element.name}</span><span>${element.number}</span></div></div><div class="element-info"><div><span>النظير المحدد</span><strong>${isotope.name}</strong></div><div><span>عدد الكتلة</span><strong>${isotope.mass}</strong></div><div><span>نصف العمر</span><strong>${isotope.halfLabel}</strong></div><div><span>النشاط النوعي النظري</span><strong>${formatActivity(specificActivity(isotope))} Bq/g</strong></div></div></article>`;
+      $("#isotope-info").innerHTML=`<article class="card element-card"><div class="element-top uses-element-top" style="background:linear-gradient(125deg,var(--blue),var(--navy))"><div class="element-symbol"><span class="uses-element-name"><b>${element.symbol}</b><br>${element.name}</span><span>${element.number}</span></div></div><div class="element-info"><div><span>النظير المحدد</span><strong>${isotope.name}</strong></div><div><span>عدد الكتلة</span><strong>${isotope.mass}</strong></div><div><span>نصف العمر</span><strong>${isotope.halfLabel}</strong></div><div><span>النشاط النوعي النظري</span><strong>${formatActivity(specificActivity(isotope))} Bq/g</strong></div></div></article>`;
       updateRadiation();
     }
     fillElementOptions($("#catalog-element"),"uranium");
@@ -805,9 +804,9 @@
         const isotope=isotopeData[$("#isotope").value],years=Number($("#years").value),mass=Number($("#mass").value);
         const fraction=Math.pow(.5,years/isotope.half);
         response=variants([
-          `نصف العمر هو الزمن الذي تنخفض خلاله كمية النظير إلى النصف. في إعدادك الحالي اخترت ${isotope.name}: بعد ${formatNum(years)} سنة من كتلة ${formatNum(mass)} غرام، يتبقى تقريباً ${formatNum(mass*fraction)} غرام (${formatNum(fraction*100)}%).`,
-          `خلّينا نقرأ المحاكاة: النظير المختار ${isotope.name} ونصف عمره ${isotope.halfLabel}. عند الزمن الذي أدخلتِه (${formatNum(years)} سنة)، تحسب الصفحة بقاء نحو ${formatNum(mass*fraction)} غرام من أصل ${formatNum(mass)} غرام. كل نصف عمر جديد يقسم الكمية على اثنين.`,
-          `النتيجة تعتمد على النظير والزمن، لذلك ليست إجابة ثابتة لكل سؤال. في تجربتك الآن مرّ ما يعادل ${formatNum(years/isotope.half)} نصف عمر؛ والكتلة المتبقية نظرياً نحو ${formatNum(mass*fraction)} غرام.`
+          `نصف العمر هو الزمن الذي تنخفض خلاله كمية النظير إلى النصف. في إعدادك الحالي اخترت ${isotope.name}: بعد ${formatNum(years)} سنة من كتلة ${formatNum(mass)} amu، يتبقى تقريباً ${formatNum(mass*fraction)} amu (${formatNum(fraction*100)}%).`,
+          `خلّينا نقرأ المحاكاة: النظير المختار ${isotope.name} ونصف عمره ${isotope.halfLabel}. عند الزمن الذي أدخلتِه (${formatNum(years)} سنة)، تحسب الصفحة بقاء نحو ${formatNum(mass*fraction)} amu من أصل ${formatNum(mass)} amu. كل نصف عمر جديد يقسم الكمية على اثنين.`,
+          `النتيجة تعتمد على النظير والزمن، لذلك ليست إجابة ثابتة لكل سؤال. في تجربتك الآن مرّ ما يعادل ${formatNum(years/isotope.half)} نصف عمر؛ والكتلة المتبقية نظرياً نحو ${formatNum(mass*fraction)} amu.`
         ]);
       } else if(has("نشاط","قوه الاشعاع","بيكريل","جرعه")) {
         const isotope=isotopeData[$("#isotope").value],activity=specificActivity(isotope);
@@ -847,7 +846,7 @@
       } else {
         response=variants([
           "لم أتعرف على موضوع السؤال بعد. معرفتي محصورة بموضوعات المختبر: النظائر، نصف العمر، النشاط الإشعاعي، أنواع الإشعاع، استخدامات العناصر، ودول الإنتاج. جرّبي إعادة صياغته بأحد هذه المواضيع.",
-          "هذا السؤال خارج المعلومات التي أعددتُها، ولا أريد أن أخمّن. أستطيع مساعدتك في العناصر الأكتينيدية أو النظائر أو نصف العمر أو الإشعاع أو خريطة إنتاج اليورانيوم.",
+          "هذا السؤال خارج المعلومات التي أعددتُها، ولا أريد أن أخمّن. أستطيع مساعدتك في العناصر السبعة المختارة ونظائرها أو نصف العمر أو الإشعاع أو خريطة إنتاج اليورانيوم.",
           `لم أجد جواباً موثوقاً لهذا السؤال في معلومات المختبر. اسأليني سؤالاً محدداً مثل «ما نصف عمر ${isotopeData[$("#isotope").value].name}؟» أو «ما استخدامات الثوريوم؟».`
         ]);
       }
@@ -868,7 +867,7 @@
       const n=getNotes();$("#student-name").value=n.name||"";$("#experiment-title").value=n.title||"مقارنة نصف العمر للنظائر";$("#hypothesis").value=n.hypothesis||"";$("#observations").value=n.observations||"";
       $$("[data-report=name]").forEach(el=>el.textContent=n.name||"—");$$("[data-report=title]").forEach(el=>el.textContent=n.title||"—");$$("[data-report=hypothesis]").forEach(el=>el.textContent=n.hypothesis||"—");$$("[data-report=observations]").forEach(el=>el.textContent=n.observations||"—");
       $("#report-date").textContent=new Date().toLocaleDateString("ar");
-      try{const sim=JSON.parse(localStorage.getItem("nuclearLabLastSimulation")||"null");$("#report-simulation").textContent=sim?`${sim.isotope} • كتلة ابتدائية ${sim.mass} غ • زمن ${sim.years} سنة • الإشعاع المحدد: ${sim.radiation} • ${sim.result.replace(/\n/g," — ")}`:"لم تُحفظ محاكاة بعد.";}
+      try{const sim=JSON.parse(localStorage.getItem("nuclearLabLastSimulation")||"null");$("#report-simulation").textContent=sim?`${sim.isotope} • كتلة ابتدائية ${sim.mass} ${sim.massUnit==="amu"?"amu":"غ"} • زمن ${sim.years} سنة • الإشعاع المحدد: ${sim.radiation} • ${sim.result.replace(/\n/g," — ")}`:"لم تُحفظ محاكاة بعد.";}
       catch(error){console.error("تعذر عرض المحاكاة في التقرير",error);$("#report-simulation").textContent="تعذر قراءة نتيجة المحاكاة المحفوظة.";}
     }
     $("#print-report").addEventListener("click",()=>{saveNotes();document.body.classList.add("print-report");window.print();document.body.classList.remove("print-report");});
